@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -104,7 +104,7 @@
 <meta property="og:image" content="https://ctinusdev.github.io/images/FileCache/image1.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/FileCache/image2.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/FileCache/image3.jpg">
-<meta property="og:updated_time" content="2017-07-29T07:35:54.000Z">
+<meta property="og:updated_time" content="2017-07-29T08:07:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS文件缓存">
 <meta name="twitter:description" content="iOS文件缓存Plist文件可以直接映射为NSDictionary和NSArray，是使用非常广泛了一种文件格式。 iOS项目开发过程中我们要用Plist文件保存一些界面的开启次数、判断用户是否是第一次进入界面、保存用户的一些配置信息等等。  接下来我们先聊聊Plist文件读写可能遇到的一些问题。 1、读写文件效率问题 iOS对于文件的读写速度优化是非常好的，在iPhone7上测试的一些几百Kb的">
@@ -116,7 +116,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     motion: true,
@@ -391,6 +391,8 @@
 <h4 id="•-LFU-less-frequently-used"><a href="#•-LFU-less-frequently-used" class="headerlink" title="• LFU(less frequently used)"></a>• LFU(less frequently used)</h4><p>最少使用策略，无论是否过期，根据元素的被使用次数判断，清除使用次数较少的元素释放空间。策略算法主要比较元素的hitCount（命中次数）。在保证高频数据有效性场景下，可选择这类策略。</p>
 <h4 id="•-LRU-least-recently-used"><a href="#•-LRU-least-recently-used" class="headerlink" title="• LRU(least recently used)"></a>• LRU(least recently used)</h4><p>最近最少使用策略，无论是否过期，根据元素最后一次被使用的时间戳，清除最远使用时间戳的元素释放空间。策略算法主要比较元素最近一次被get使用时间。在热点数据场景下较适用，优先保证热点数据的有效性。<br>除此之外，还有一些简单策略比如：<br>• 根据过期时间判断，清理过期时间最长的元素；<br>• 根据过期时间判断，清理最近要过期的元素；<br>• 随机清理；<br>• 根据关键字（或元素内容）长短清理等。</p>
 <p>这些策略不分好坏，主要看缓存的应用场景。</p>
+<div class="note danger"><p>Content (md partial supported) </p>
+</div>
 
       
     </div>
@@ -595,7 +597,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Pisces
   </a>
 </div>
 
@@ -674,6 +676,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
