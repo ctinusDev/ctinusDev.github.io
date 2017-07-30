@@ -93,23 +93,23 @@
 
 
 
-<meta name="description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta name="description" content="Effective Objective-C 总结 1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验">
 <meta name="keywords" content="ObjectiveC,iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EffectiveObjcLearn">
 <meta property="og:url" content="https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
-<meta property="og:description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta property="og:description" content="Effective Objective-C 总结 1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image1.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image2.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image3.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image4.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image5.jpg">
-<meta property="og:updated_time" content="2017-07-30T05:41:41.000Z">
+<meta property="og:updated_time" content="2017-07-30T05:44:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="EffectiveObjcLearn">
-<meta name="twitter:description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta name="twitter:description" content="Effective Objective-C 总结 1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验">
 <meta name="twitter:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image1.jpg">
 
 
@@ -338,7 +338,8 @@
       
 
       
-        <h1 id="Effective-Objective-C-总结"><a href="#Effective-Objective-C-总结" class="headerlink" title="Effective Objective-C 总结"></a>Effective Objective-C 总结</h1><p>1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替</p>
+        <h1 id="Effective-Objective-C-总结"><a href="#Effective-Objective-C-总结" class="headerlink" title="Effective Objective-C 总结"></a>Effective Objective-C 总结</h1><hr>
+<p>1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替</p>
 <p>2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。<br>例如： </p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arr = @[<span class="string">@"1"</span>,<span class="string">@"asd"</span>,<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
 <p>3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。<br>只在本文件使用，在.m文件中 </p>
