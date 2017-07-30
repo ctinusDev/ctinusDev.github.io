@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ObjectiveC,iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta name="keywords" content="ObjectiveC,iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EffectiveObjcLearn">
+<meta property="og:url" content="https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn/index.html">
+<meta property="og:site_name" content="ctinusDev&#39;s Blog">
+<meta property="og:description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image1.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image2.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image3.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image4.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image5.jpg">
+<meta property="og:updated_time" content="2017-07-30T05:41:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EffectiveObjcLearn">
+<meta name="twitter:description" content="Effective Objective-C 总结1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。">
+<meta name="twitter:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn/"/>
+
+
+
+
+
+  <title>EffectiveObjcLearn | ctinusDev's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ctinusDev's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Development  Sharing</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ctinusDev">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ctinusDev's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EffectiveObjcLearn</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-30T12:00:07+08:00">
+                2017-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/30/EffectiveObjcLearn/" class="leancloud_visitors" data-flag-title="EffectiveObjcLearn">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Effective-Objective-C-总结"><a href="#Effective-Objective-C-总结" class="headerlink" title="Effective Objective-C 总结"></a>Effective Objective-C 总结</h1><p>1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替</p>
+<p>2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。<br>例如： </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *arr = @[<span class="string">@"1"</span>,<span class="string">@"asd"</span>,<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
+<p>3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验。<br>只在本文件使用，在.m文件中 </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">NSTimeInterval</span> kAnimationDuration = <span class="number">0.3</span>;</div></pre></td></tr></table></figure>
+<p>要做为全局常量，在.h文件中</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> EOCStringConstant;</div><div class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="built_in">NSTimeInterval</span>  EOCAnimationDuration;</div></pre></td></tr></table></figure>
+<p>在.m文件中 </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *<span class="keyword">const</span> EOCStringConstant = <span class="string">@"Value"</span>;</div><div class="line"><span class="keyword">const</span> <span class="built_in">NSTimeInterval</span>  EOCAnimationDuration = <span class="number">0.3</span>;</div></pre></td></tr></table></figure>
+<p>4、枚举类型定义使用 <code>typedef NS_ENUM/NS_OPTIONS (type, name)</code>,<br><strong>NS_ENUM</strong>做状态枚举时，在<code>switch</code>中不要实现<code>default</code>，或者在<code>default</code>中添加断言。防止枚举中添加了状态而<code>switch</code>中忘记修改。<br><strong>NS_OPTIONS</strong>用于实现枚举多选，各选项的值定义为2的幂，通过按位或操作进行组合。通过位与运算判断是否包含某个值。</p>
+<p>5、属性在<code>@interface</code>中通过<code>@property</code>定义，在<code>@implementation</code>中可以使用<code>@synthesize</code> 自定义属性对应的实例变量名。<code>@dynamic</code>会告诉编译器不要为属性创建实例变量，也不要创建存取方法。<br>属性特性：<br>原子性 ： atomic会给属性添加同步锁，防止多线程中修改属性出现问题。nonatomic则不使用同步锁。使用同步锁后，属性的读取效率会降低，一般如果不是非常必要，属性会定义为nonatomic。<br>读写权限：readwrite为默认特性，默认编译器会自动生成getter 和 setter方法。readonly只读特性，一般的使用方法是在头文件中定义只读属性，在实现文件的分类中重新将其定义为readwrite。<br>例如<br>.h文件中</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Class</span>: <span class="title">NSObject</span></span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span>  *parmString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>.m文件中</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Class</span>()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">readwrite</span>) <span class="built_in">NSString</span>  *parmString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>内存管理语义：影响setter方法在设置时属性的引用计数变化。</p>
+<ul>
+<li>assign：只针对纯量类型 CGFloat、NSInteger等简单的赋值使用。</li>
+<li>strong：会导致传入数据的引用计数加一。当前类会持有该属性</li>
+<li>weak：不会增加属性的引用计数，当前类不持有该属性。</li>
+<li>unsafe_unretained：该特性与weak的区别在于，对象释放时属性的值不会清空。</li>
+<li>copy：与strong的区别在于，copy特性会直接copy一份setter方法传进来的值，而不是直接持有该值。copy特性经常用于保护属性的封装性。例如NSString类型的属性，外部传过来的是NSMutableString类型，这时如果不copy一份不可变的数据 ，属性的值就有可能被外部修改。</li>
+</ul>
+<p>方法名：getter=<name> 指定一个自定义的getter方法，例如</name></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">getter</span> = isOn) <span class="built_in">BOOL</span> on;</div></pre></td></tr></table></figure>
+<p>setter=<name>指定一个自定义的设置方法，这种用法不太常见。</name></p>
+<p>6、直接使用属性的实例变量要比调用属性的getter／setter方法效率高。</p>
+<p>7、<strong>NSObject</strong> 中定义的<code>isEqual:</code>方法要比在子类中定义的<code>isEqualXXXX:</code>方法慢。<br>例如 <strong>NSString</strong>调用 <code>isEqualToString:</code>方法比调用<code>isEqual:</code>快，因为<code>isEqual:</code>还需要检测对象类型。</p>
+<p>8、hash在collection（集合）中作为对象的索引，对象相等时其hash值一定相等，相反hash相等并不一定对象就相等。在重写hash函数时，一定要满足此条件。为了让hash能起到索引作用，又不会带来额外的性能代价，一般使用子类的hash进行与操作。<br>        可变对象放入collection（集合）中后，其hash就不能再次改变。因为在对象会根据hash索引放入不同的“箱子数组”中，这时如果改变了hash值，那对象存放的位置就会变成错误的。这时要保证对象的hash值是根据其不可变部分生成的。</p>
+<p>9、数据库对象判断相等可以简化为判断属性 identifier相等，identifier在数据库中作“主键”（primary key）</p>
+<p>10、<strong>NSArray</strong>、<strong>NSMutableArray</strong>、<strong>NSDictionary</strong>、<strong>NSMutableDictionary</strong>都是个类簇，通过其方法创建的对象真正类型是一些内部类型，可以使用[obj class]打印真正的类型。</p>
+<p>11、用<code>obj_setAssociatedObject(id object, void *key, id value, objc_AssociationPolicy policy)</code>方法给对象添加动态属性。<br><code>objc_AssociationPolicy</code>与<code>@property</code>等价特性</p>
+<table>
+<thead>
+<tr>
+<th>关联类型</th>
+<th style="text-align:center">等效的@property属性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OBJC_ASSOCIATION_ASSIGN</td>
+<td style="text-align:center">assign</td>
+</tr>
+<tr>
+<td>OBJC_ASSOCIATION_RETAIN_NONATOMIC</td>
+<td style="text-align:center">nonatomic,retain</td>
+</tr>
+<tr>
+<td>OBJC_ASSOCIATION_COPY_NONATOMIC</td>
+<td style="text-align:center">nonatomic,copy</td>
+</tr>
+<tr>
+<td>OBJC_ASSOCIATION_RETAIN</td>
+<td style="text-align:center">retain</td>
+</tr>
+<tr>
+<td>OBJC_ASSOCIATION_COPY</td>
+<td style="text-align:center">copy</td>
+</tr>
+</tbody>
+</table>
+<p>12、objc_msgSend是objective-C语言实现的最核心方法。所有的objective-C的消息发送最终都是转换为了objc_msgSend进行传递。其函数原型如下<br><code>&lt;return_type&gt; Class_selector(id self, SEL _cmd, …)</code></p>
+<p>objc_msgSend根据对象所属类搜寻其方法列表（list of methods）。如果能找到与selector名字相同的方法，就跳转至实现代码。找不到则沿着继承体系继续向上查找。如果最终找不到相符合的方法，就执行“消息转发”（message forwarding）。</p>
+<p>objc_msgSend将匹配结果缓存至“快速映射表”（fast map），下次再向该类发送改方法，会直接从快速映射表中查找，提高查询效率。</p>
+<p>13、消息转发机制。<br>消息转发分为两大阶段。第一阶段询问所属类是否能动态添加方法，处理这个unknown selector，此过程叫“动态方法解析”（dynamics method resolution）。第二阶段涉及“完整的消息转发机制”（full forwarding mechanism），首先会询问是否有其他对象可以处理这条消息，若存在备援接收者（replacement receiver），则将消息转发给备援接收者，否则启动完整的消息转发机制。<br>消息转发全流程<br><img src="/images/EffecitveObjcLearn/image1.jpg" alt=""></p>
+<p>14、类对象<br>Objective-C中的每个实例对象都是指向某块内存数据的指针。通用数据类型id本身就是指针。<br>id类型的定义：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> objc_object &#123;</div><div class="line">    Class isa  OBJC_ISA_AVAILABILITY;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Class对象的定义:</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> objc_class &#123;</div><div class="line">    Class isa  OBJC_ISA_AVAILABILITY;</div><div class="line"></div><div class="line"><span class="meta">#if !__OBJC2__</span></div><div class="line">    Class super_class                                        OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name                                         OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">long</span> version                                             OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">long</span> info                                                OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">long</span> instance_size                                       OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">struct</span> objc_ivar_list *ivars                             OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">struct</span> objc_method_list **methodLists                    OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">struct</span> objc_cache *cache                                 OBJC2_UNAVAILABLE;</div><div class="line">    <span class="keyword">struct</span> objc_protocol_list *protocols                     OBJC2_UNAVAILABLE;</div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此结构体存放的“元数据”（<strong>metadata</strong>）。例如类的实例实现了几个方法。具备多个实例变量等信息。此结构体的首个变量也是<strong>isa</strong>指针，这说明<strong>Class</strong>本身也是Objective-C对象。<br><strong>super_class</strong>：结构体里还有个变量叫做<strong>super_class</strong>,它定义了本类的超类。<br><strong>isa</strong>：类对象所属的类型（也就是<strong>isa</strong>指针所指向的类型）是另一个类，叫做“元类”（<strong>metaclass</strong>），用来表达类对象本身所具备的元数据。“类方法”就定义在<strong>isa</strong>中，这些方法可以理解为<strong>isa</strong>的实例方法。每个类只有一个<strong>isa</strong>，每个isa仅有一个与之相关的“元类”。</p>
+<p>假设有个名为ComeClass的字类从NSObject中继承而来，则其继承体系如下图：<br><img src="/images/EffecitveObjcLearn/image2.jpg" alt=""><br>super_class指针确立了继承关系，isa指针描述了实例所属的类。</p>
+<p>15、<code>-(id)initWithCoder:(NSCoder *)decoder</code> 方法通过“解码器”（decoder）将对象数据解压缩，例如：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">id</span>) initWithCoder:(<span class="built_in">NSCoder</span> *)decoder</div><div class="line">&#123;</div><div class="line">	If ([<span class="keyword">self</span> = [<span class="keyword">super</span> initWithCoder:decoder]])&#123;</div><div class="line">		_property = [decoder decodeFloatForKey:<span class="string">@"width"</span>];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>16、利用description实现<strong>NSLog</strong>打印对象的自定义信息，在<strong>NSLog</strong>一个自定义对象时，obj对象会收到description消息，返回的描述信息将输出到console中。系统类重写了description类，所以在<strong>NSLog</strong>中可以看到比较详细的输出数据，自定义的Class需要用户重写description方法，以便能打印真正用户的信息。例如：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-(<span class="built_in">NSString</span> *)description</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"&lt;%@: %p, \"%@ %@\"&gt;"</span>,<span class="keyword">self</span>.class, <span class="keyword">self</span>, _firstName, _lastName];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的信息打印了对象对应的类，对象地址，和包含的属性信息。</p>
+<p>17、为了更好的区分私有方法和共有方法，可以给私有方法添加p_前缀，p表示“private”</p>
+<p>18、<strong>NSCopying</strong>／<strong>NSMutableCopying</strong>协议<br>在对象调用copy方法时，真正进行复制的方法是<code>copyWithZone:(NSZone *)zone</code>, copy方法只是使用了默认的zone来调用<code>copyWithZone:</code>。在一些自定义的类中，如果要实现copy方法，需要声明该类遵从<strong>NSCopying</strong>协议，并重写<code>copyWithZone:</code>方法。例如：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">EOCPerson</span> : <span class="title">NSObject</span> &lt;<span class="title">NSCopying</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span> *firstName;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span> *lastName;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithFirstName:(<span class="built_in">NSString</span> *)firstName</div><div class="line">            andLastName:(<span class="built_in">NSString</span> *)lastName;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>然后，实现协议中规定的方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>)copyWithZone:(<span class="built_in">NSZone</span> *)zone&#123;</div><div class="line">    EOCPerson *<span class="keyword">copy</span> = [[[<span class="keyword">self</span> <span class="keyword">class</span>] allocWithZone:zone] initWithFirstName:_firstName</div><div class="line">                                                               andLastName:_lastName];</div><div class="line">    <span class="keyword">return</span> <span class="keyword">copy</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果要拷贝一份可变数据，比如 <code>[NSArray mutableCopy];</code>则需要重写<code>mutableCopyWithZone:</code>方法。<br>Foundation框架中所有collection类默认 情况下都是执行浅拷贝，只拷贝容器本身，不复制其中数据。原因是容器中的对象不一定支持拷贝，而调用者也未必想要拷贝容器数据。<br><img src="/images/EffecitveObjcLearn/image3.jpg" alt=""></p>
+<p>19、在循环语句中使用<code>autoreleasepool</code>降低内存峰值，如果在<code>for</code>循环中创建了占用大量内存的临时变量，因为自动释放池要等线程执行下一次事件循环时才会清空。在<code>for</code>循环过程中内存无法释放，就会导致内存持续上涨。在<code>for</code>循环中嵌套 <code>autoreleasepool</code>使用，在每次循环结束，都会把分配的临时内存回收。如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *databaseRecords = <span class="comment">/*...*/</span>;</div><div class="line"></div><div class="line"><span class="built_in">NSMutableArray</span> *people = [<span class="built_in">NSMutableArray</span> array];</div><div class="line"><span class="keyword">for</span> (<span class="built_in">NSDictionary</span> *record <span class="keyword">in</span> databaseRecords) &#123;</div><div class="line">    <span class="keyword">@autoreleasepool</span> &#123;</div><div class="line">        EOCPerson *person = [[EOCPerson alloc] initWithRecord:record];</div><div class="line">        [people addObject:person];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>20、block其实是objective-C对c函数指针的封装。block本身也是对象。<br>块的内部结构<br>每个Objective-C对象都占据着某个内存区域。因为实例变量的个数及对象所包含的关联数据互不相同，所以每个对象所占的内存区域也有大有小。块本身也是对象，在存放块对象的内存区域中，首个变量是指向Class对象的指针，该指针叫做isa(参见第14条)。其余内存里含有块对象正常运转所需的各种信息。下表详细描述了块对象的内存布局。<br><img src="/images/EffecitveObjcLearn/image4.jpg" alt=""></p>
+<p>在内存布局中，最重要的就是invoke变量，这是个函数指针，指向块的实现代码。函数原型至少要接受一个void*型的参数，此参数代表块。刚才说过，块其实就是一种代替函数指针的语法结构，原来使用函数指针时，需要用“不透明的void指针”来传递状态。而改用块之后，则可以把原来用标准C语言特性所编写的代码封装成简明且易用的接口。</p>
+<p>descriptor变童是指向结构体的指针，每个块里都包含此结构体，其中声明了块对象的总体大小，还声明了 copy与dispose这两个辅助函数所对应的函数指针。辅助函数在拷贝及丟弃块对象时运行，其中会执行一些操作，比方说，前者要保留捕获的对象，而后者则将之释放。</p>
+<p>块还会把它所捕获的所有变量都拷贝一份。这些拷贝放在descriptor变量后面，捕获了多少个变量，就要占据多少内存空间。请注意，拷贝的并不是对象本身，而是指向这些对象的指针变量。invoke函数为何需要把块对象作为参数传进来呢？原因就在于，执行块时，要从内存中吧这些捕获到的变量读出来。</p>
+<p>21、利用<strong>GCD</strong> 栅栏（barrier）实现同步锁功能。<br><code>void dispatch_barrier_async(dispatch_queue_t queue, dispatch_block block);
+void dispatch_barrier_sync(dispatch_queue_t queue, dispatch_block block);</code><br>在队列中，栅栏快必须单独执行，不能语其他块执行。并发队列如果发现接下来要处理的块是栅栏块（barrier block），那么就一直等当前所有并发块执行完毕，才会单独执行这个栅栏块。栅栏块执行过后，在按正常方式继续向下处理。代码实现可以参见：<a href="https://ctinusdev.github.io/2017/07/29/FileCache/#more">FileCache</a><br><img src="/images/EffecitveObjcLearn/image5.jpg" alt=""><br>这里使用<code>dispatch_barrier_sync</code>代替<code>dispatch_barrier_aync</code>会让setSomeString:方法效率更高，原因是<code>dispatch_barrier_sync</code>会在执行完当前操作后，才会插入后续要添加到queue中代码。<br><code>dispatch_barrier_sync</code>和<code>dispatch_barrier_aync</code>的区异同：<br>共同点：<br>1、等待在它前面插入队列的任务先执行完<br>2、等待他们自己的任务执行完再执行后面的任务<br>不同点：<br>1、<code>dispatch_barrier_sync</code>将自己的任务插入到队列的时候，需要等待自己的任务结束之后才会继续插入被写在它后面的任务，然后执行它们<br>2、<code>dispatch_barrier_async</code>将自己的任务插入到队列之后，不会等待自己的任务结束，它会继续把后面的任务插入到队列，然后等待自己的任务结束后才执行后面任务。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="ctinusDev WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="ctinusDev Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ObjectiveC/" rel="tag"># ObjectiveC</a>
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/FileCache/" rel="next" title="iOS文件缓存">
+                <i class="fa fa-chevron-left"></i> iOS文件缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ctinusDev" />
+          <p class="site-author-name" itemprop="name">ctinusDev</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Effective-Objective-C-总结"><span class="nav-number">1.</span> <span class="nav-text">Effective Objective-C 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ctinusDev</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("z64DkEGmmRACgBQhankrR9CS-gzGzoHsz", "lEVwYGjtw9hocOO8l3Ycldiq");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
