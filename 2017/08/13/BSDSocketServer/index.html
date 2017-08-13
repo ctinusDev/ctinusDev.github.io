@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS,BSDSocket,Server," />
+  <meta name="keywords" content="iOS,BSDSocket,CFStream,GCD,Server," />
 
 
 
@@ -94,17 +94,17 @@
 
 
 <meta name="description" content="iOS网络编程层次iOS网络编程层次结构也分为三层：  Cocoa层：NSURL，Bonjour，Game Kit，WebKit Core Foundation层：基于 C 的 CFNetwork 和 CFNetServices OS层:基于 C 的 BSD socket  Cocoa层：是最上层的基于 Objective-C 的 API，比如 URL访问，NSStream，Bonjour，Gam">
-<meta name="keywords" content="iOS,BSDSocket,Server">
+<meta name="keywords" content="iOS,BSDSocket,CFStream,GCD,Server">
 <meta property="og:type" content="article">
-<meta property="og:title" content="BSDSocketServer">
+<meta property="og:title" content="iOS搭建Socket服务器的相关方法">
 <meta property="og:url" content="https://ctinusdev.github.io/2017/08/13/BSDSocketServer/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
 <meta property="og:description" content="iOS网络编程层次iOS网络编程层次结构也分为三层：  Cocoa层：NSURL，Bonjour，Game Kit，WebKit Core Foundation层：基于 C 的 CFNetwork 和 CFNetServices OS层:基于 C 的 BSD socket  Cocoa层：是最上层的基于 Objective-C 的 API，比如 URL访问，NSStream，Bonjour，Gam">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ctinusdev.github.io/images/BSDSocketServer/image1.jpg">
-<meta property="og:updated_time" content="2017-08-13T06:26:56.000Z">
+<meta property="og:updated_time" content="2017-08-13T06:31:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BSDSocketServer">
+<meta name="twitter:title" content="iOS搭建Socket服务器的相关方法">
 <meta name="twitter:description" content="iOS网络编程层次iOS网络编程层次结构也分为三层：  Cocoa层：NSURL，Bonjour，Game Kit，WebKit Core Foundation层：基于 C 的 CFNetwork 和 CFNetServices OS层:基于 C 的 BSD socket  Cocoa层：是最上层的基于 Objective-C 的 API，比如 URL访问，NSStream，Bonjour，Gam">
 <meta name="twitter:image" content="https://ctinusdev.github.io/images/BSDSocketServer/image1.jpg">
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>BSDSocketServer | ctinusDev's Blog</title>
+  <title>iOS搭建Socket服务器的相关方法 | ctinusDev's Blog</title>
   
 
 
@@ -276,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">BSDSocketServer</h1>
+          <h1 class="post-title" itemprop="name headline">iOS搭建Socket服务器的相关方法</h1>
         
 
         <div class="post-meta">
@@ -328,7 +328,7 @@
 
           
           
-             <span id="/2017/08/13/BSDSocketServer/" class="leancloud_visitors" data-flag-title="BSDSocketServer">
+             <span id="/2017/08/13/BSDSocketServer/" class="leancloud_visitors" data-flag-title="iOS搭建Socket服务器的相关方法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -443,6 +443,10 @@
             <a href="/tags/iOS/" rel="tag"># iOS</a>
           
             <a href="/tags/BSDSocket/" rel="tag"># BSDSocket</a>
+          
+            <a href="/tags/CFStream/" rel="tag"># CFStream</a>
+          
+            <a href="/tags/GCD/" rel="tag"># GCD</a>
           
             <a href="/tags/Server/" rel="tag"># Server</a>
           
@@ -560,7 +564,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

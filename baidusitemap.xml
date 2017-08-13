@@ -5,15 +5,19 @@
     
   <url>
     <loc>https://ctinusdev.github.io/2017/08/13/BSDSocketServer/</loc>
-    <lastmod>2017-08-13T06:26:56.000Z</lastmod>
+    <lastmod>2017-08-13T06:31:06.000Z</lastmod>
     <data>
         <display>
-        <title>BSDSocketServer</title>
+        <title>iOS搭建Socket服务器的相关方法</title>
         <pubTime>2017-08-13T05:52:25.000Z</pubTime>
         
         <tag>iOS</tag>
          
         <tag>BSDSocket</tag>
+         
+        <tag>CFStream</tag>
+         
+        <tag>GCD</tag>
          
         <tag>Server</tag>
          
