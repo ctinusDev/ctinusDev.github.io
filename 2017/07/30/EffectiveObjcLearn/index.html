@@ -106,7 +106,7 @@
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image3.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image4.jpg">
 <meta property="og:image" content="https://ctinusdev.github.io/images/EffecitveObjcLearn/image5.jpg">
-<meta property="og:updated_time" content="2017-07-30T05:46:21.000Z">
+<meta property="og:updated_time" content="2017-08-20T10:02:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Effective Objective-C 总结">
 <meta name="twitter:description" content="Effective Objective-C 总结 1、类的头文件中尽量少引入其他头文件，有可能的话使用@class代替 2、字面量语法在可读性上优于与之等价的方法，但是要做好数据校验，不能将nil数据直接存入其中。例如：  1NSArray *arr = @[@&quot;1&quot;,@&quot;asd&quot;,nil]; 3、能用常量定义，就尽量不要使用#define预处理指令。常量定义带有数据类型，编译前会进行数据格式校验">
@@ -451,6 +451,8 @@
 <p>块还会把它所捕获的所有变量都拷贝一份。这些拷贝放在descriptor变量后面，捕获了多少个变量，就要占据多少内存空间。请注意，拷贝的并不是对象本身，而是指向这些对象的指针变量。invoke函数为何需要把块对象作为参数传进来呢？原因就在于，执行块时，要从内存中吧这些捕获到的变量读出来。</p>
 <p>21、利用<strong>GCD</strong> 栅栏（barrier）实现同步锁功能。<br><code>void dispatch_barrier_async(dispatch_queue_t queue, dispatch_block block);
 void dispatch_barrier_sync(dispatch_queue_t queue, dispatch_block block);</code><br>在队列中，栅栏快必须单独执行，不能语其他块执行。并发队列如果发现接下来要处理的块是栅栏块（barrier block），那么就一直等当前所有并发块执行完毕，才会单独执行这个栅栏块。栅栏块执行过后，在按正常方式继续向下处理。代码实现可以参见：<a href="https://ctinusdev.github.io/2017/07/29/FileCache/#more">FileCache</a><br><img src="/images/EffecitveObjcLearn/image5.jpg" alt=""><br>这里使用<code>dispatch_barrier_sync</code>代替<code>dispatch_barrier_aync</code>会让setSomeString:方法效率更高，原因是<code>dispatch_barrier_sync</code>会在执行完当前操作后，才会插入后续要添加到queue中代码。<br><code>dispatch_barrier_sync</code>和<code>dispatch_barrier_aync</code>的区异同：<br>共同点：<br>1、等待在它前面插入队列的任务先执行完<br>2、等待他们自己的任务执行完再执行后面的任务<br>不同点：<br>1、<code>dispatch_barrier_sync</code>将自己的任务插入到队列的时候，需要等待自己的任务结束之后才会继续插入被写在它后面的任务，然后执行它们<br>2、<code>dispatch_barrier_async</code>将自己的任务插入到队列之后，不会等待自己的任务结束，它会继续把后面的任务插入到队列，然后等待自己的任务结束后才执行后面任务。</p>
+<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn">https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn</a><br><strong>转载请注明出处！</strong> </p>
+</div>
 
       
     </div>
