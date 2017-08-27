@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/</loc>
+    <lastmod>2017-08-27T09:59:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>Mach-O文件介绍之mach_header</title>
+        <pubTime>2017-08-20T10:42:55.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+        <tag>Mach-O</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS" url="https://ctinusdev.github.io/categories/iOS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://ctinusdev.github.io/2017/08/13/BSDSocketServer/</loc>
     <lastmod>2017-08-20T10:05:57.000Z</lastmod>
     <data>
