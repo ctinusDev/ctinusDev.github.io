@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
 <meta property="og:description" content="ASLR 介绍ASLR，地址空间布局随机化，是一种避免app被攻击的有效保护。 进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。 这给黑客提供了更大的施展空间。黑">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-27T11:21:14.000Z">
+<meta property="og:updated_time" content="2017-08-27T11:42:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
 <meta name="twitter:description" content="ASLR 介绍ASLR，地址空间布局随机化，是一种避免app被攻击的有效保护。 进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。 这给黑客提供了更大的施展空间。黑">
@@ -341,7 +341,7 @@
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> intptr_t   _dyld_get_image_vmaddr_slide(uint32_t image_index);</div></pre></td></tr></table></figure>
 <p>一般使用方法如下：</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">uint32_t c = _dyld_image_count();</div><div class="line">    <span class="keyword">for</span> (uint32_t i = <span class="number">0</span>; i &lt; c; i++) &#123;</div><div class="line">     intptr_t index  = _dyld_get_image_vmaddr_slide(i);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h3 id="哪里使用"><a href="#哪里使用" class="headerlink" title="哪里使用?"></a>哪里使用?</h3><p>ALSR决定了虚拟地址在内存中会发生的偏移量。例如一个 <strong>segment_command_64</strong> 的<em>vmaddr</em> 字段决定了其在虚拟内存中的地址。但是其真正的内存地址则是<em>vmaddr</em> + <em>ALSR</em>。</p>
+<h2 id="哪里使用"><a href="#哪里使用" class="headerlink" title="哪里使用?"></a>哪里使用?</h2><p>ALSR决定了虚拟地址在内存中会发生的偏移量。例如一个 <strong>segment_command_64</strong> 的<em>vmaddr</em> 字段决定了其在虚拟内存中的地址。但是其真正的内存地址则是<em>vmaddr</em> + <em>ALSR</em>。</p>
 <p>在fishhook中计算程序基址，使用动态符号表的虚拟地址和偏移来计算基址，具体算法如下：<br>基址 = <em>__LINKEDIT.VM_Address</em> - <em>__LINK.File_Offset</em> + <em>silde</em>的改变值<br>其中的silde就是由于ALSR所产生的随机偏移量。</p>
 <div class="note danger"><p><strong>本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_ASLR/">https://ctinusdev.github.io/2017/08/20/Mach-OBasis_ASLR/</a><br><strong>转载请注明出处！</strong> </p>
 </div>
@@ -550,7 +550,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ASLR-介绍"><span class="nav-number">1.</span> <span class="nav-text">ASLR 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取ASLR"><span class="nav-number">2.</span> <span class="nav-text">获取ASLR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪里使用"><span class="nav-number">2.1.</span> <span class="nav-text">哪里使用?</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ASLR-介绍"><span class="nav-number">1.</span> <span class="nav-text">ASLR 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取ASLR"><span class="nav-number">2.</span> <span class="nav-text">获取ASLR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪里使用"><span class="nav-number">3.</span> <span class="nav-text">哪里使用?</span></a></li></ol></div>
             
 
           </div>
