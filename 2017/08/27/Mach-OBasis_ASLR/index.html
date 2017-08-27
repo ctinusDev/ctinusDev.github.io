@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS,Mach-O,mach_header," />
+  <meta name="keywords" content="iOS,Mach-O,ASLR," />
 
 
 
@@ -93,24 +93,18 @@
 
 
 
-<meta name="description" content="Mach-O文件介绍之mach_headerMach-O是OSX和iOS上的可执行二进制文件格式:Mach-Object。使用Mach-O（Mach对象）文件实现内核扩展，命令行工具，应用程序，框架和库（共享和静态）。 Mach-O文件具有以下数据区域（完整格式在OS X ABI Mach-O文件格式参考中描述）：• 标题（Header）：指定文件的目标体系结构，如PPC，PPC64，IA-32或">
-<meta name="keywords" content="iOS,Mach-O,mach_header">
+<meta name="description" content="ASLR 介绍ASLR，地址空间布局随机化，是一种避免app被攻击的有效保护。 进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。 这给黑客提供了更大的施展空间。黑">
+<meta name="keywords" content="iOS,Mach-O,ASLR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mach-O文件介绍之mach_header">
-<meta property="og:url" content="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/index.html">
+<meta property="og:title" content="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
+<meta property="og:url" content="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_ASLR/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
-<meta property="og:description" content="Mach-O文件介绍之mach_headerMach-O是OSX和iOS上的可执行二进制文件格式:Mach-Object。使用Mach-O（Mach对象）文件实现内核扩展，命令行工具，应用程序，框架和库（共享和静态）。 Mach-O文件具有以下数据区域（完整格式在OS X ABI Mach-O文件格式参考中描述）：• 标题（Header）：指定文件的目标体系结构，如PPC，PPC64，IA-32或">
+<meta property="og:description" content="ASLR 介绍ASLR，地址空间布局随机化，是一种避免app被攻击的有效保护。 进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。 这给黑客提供了更大的施展空间。黑">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image1.jpg">
-<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image2.jpg">
-<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image3.jpg">
-<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image4.jpg">
-<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image5.jpg">
-<meta property="og:updated_time" content="2017-08-27T10:05:02.000Z">
+<meta property="og:updated_time" content="2017-08-27T11:21:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mach-O文件介绍之mach_header">
-<meta name="twitter:description" content="Mach-O文件介绍之mach_headerMach-O是OSX和iOS上的可执行二进制文件格式:Mach-Object。使用Mach-O（Mach对象）文件实现内核扩展，命令行工具，应用程序，框架和库（共享和静态）。 Mach-O文件具有以下数据区域（完整格式在OS X ABI Mach-O文件格式参考中描述）：• 标题（Header）：指定文件的目标体系结构，如PPC，PPC64，IA-32或">
-<meta name="twitter:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Header/image1.jpg">
+<meta name="twitter:title" content="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
+<meta name="twitter:description" content="ASLR 介绍ASLR，地址空间布局随机化，是一种避免app被攻击的有效保护。 进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。 这给黑客提供了更大的施展空间。黑">
 
 
 
@@ -138,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/"/>
+  <link rel="canonical" href="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_ASLR/"/>
 
 
 
 
 
-  <title>Mach-O文件介绍之mach_header | ctinusDev's Blog</title>
+  <title>Mach-O文件介绍之ASLR(进程地址空间布局随机化) | ctinusDev's Blog</title>
   
 
 
@@ -263,7 +257,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_ASLR/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ctinusDev">
@@ -280,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mach-O文件介绍之mach_header</h1>
+          <h1 class="post-title" itemprop="name headline">Mach-O文件介绍之ASLR(进程地址空间布局随机化)</h1>
         
 
         <div class="post-meta">
@@ -292,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T18:42:55+08:00">
-                2017-08-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T19:08:40+08:00">
+                2017-08-27
               </time>
             
 
@@ -303,28 +297,6 @@
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -332,7 +304,7 @@
 
           
           
-             <span id="/2017/08/20/Mach-OBasis_Header/" class="leancloud_visitors" data-flag-title="Mach-O文件介绍之mach_header">
+             <span id="/2017/08/27/Mach-OBasis_ASLR/" class="leancloud_visitors" data-flag-title="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -360,16 +332,18 @@
       
 
       
-        <h3 id="Mach-O文件介绍之mach-header"><a href="#Mach-O文件介绍之mach-header" class="headerlink" title="Mach-O文件介绍之mach_header"></a>Mach-O文件介绍之mach_header</h3><p>Mach-O是OSX和iOS上的可执行二进制文件格式:Mach-Object。使用Mach-O（Mach对象）文件实现内核扩展，命令行工具，应用程序，框架和库（共享和静态）。</p>
-<p>Mach-O文件具有以下数据区域（完整格式在OS X ABI Mach-O文件格式参考中描述）：<br>• <strong>标题</strong>（Header）：指定文件的目标体系结构，如PPC，PPC64，IA-32或x86-64。<br>• <strong>加载命令</strong>（Load commands）：在虚拟内存中指定文件的逻辑结构和文件的布局。<br>• <strong>原始段数据</strong>（Raw segment data）：包含在加载命令中定义的段的原始数据。主要包含代码、数据，例如符号表，动态符号表等等。</p>
-<p>iOS和OSX有两种类型的目标文件：Mach-O文件和通用二进制文件（胖文件）。它们之间的区别是：Mach-O文件包含一种架构（i386、x86_64、arm64等等）的对象代码，而胖文件可能包含若干不同架构对象代<br>码的对象文件。<br>Mach-O文件和胖文件的文件结构如下：<br><img src="/images/Mach-OBasis_Header/image1.jpg" alt="Mach-O文件.jpg"><br><img src="/images/Mach-OBasis_Header/image2.jpg" alt="胖文件.jpg"></p>
-<h3 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h3><p>Mach-O有一个固定的文件头mach_header，格式如下图：<br><img src="/images/Mach-OBasis_Header/image3.jpg" alt=""></p>
-<p>magic用于加载器判断该二进制文件用于32位还是64位。<br>cputype、cpusubtype作用是一样的，用于确保二进制文件适合并且可以在当前架构下运行。<br><strong>filetype</strong>的可取值定义在<mach-o loader.h="">头文件中。常见的值如下表。<br><img src="/images/Mach-OBasis_Header/image4.jpg" alt=""></mach-o></p>
-<p><strong>flags</strong>定义在<mach-o loader.h="">中<br><img src="/images/Mach-OBasis_Header/image5.jpg" alt=""></mach-o></p>
-<p>上表中可以看出，有两个<strong>flags</strong>和“执行”相关：<strong>MH_ALLOW_STACK_EXECUTION</strong>和<strong>MH_NO_HEAP_EXECTION</strong>.这两个<strong>flags</strong>都用于防止某些数据的执行，通常称为NX(Non-eXecutable).通过将数据所在的内存页面标记为不可执行，（一般情况下）可以防止黑客进行代码注入，因为黑客不能方便的执行数据段中的代码。如果试图执行数据段中的代码，则会引发一个硬件异常，进程会终止——让进程崩溃，从而避免执行注入的代码。<br>            由于代码注入的常见方法时使用栈变量（即自动变量），因此默认情况下栈都标记为不可执行，而flags可以用于覆盖这种行为（非常危险）。堆则默认可执行。但是通过堆注入代码相对困难一些。<br>这两个flags的设置可以在系统级别进行：通过sysctl修改vm.allow_stack_exec和vm.allow_heap_exec变量。<br>    在iOS中堆和栈都默认是不可执行的。</p>
-<p>Mach-O的Header在Objective-C中定义为了如下结构体：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * The 32-bit mach header appears at the very beginning of the object file for</div><div class="line"> * 32-bit architectures.</div><div class="line"> */</div><div class="line"><span class="keyword">struct</span> mach_header &#123;</div><div class="line">    uint32_t    magic;      <span class="comment">/* mach magic number identifier */</span></div><div class="line">    cpu_type_t  cputype;    <span class="comment">/* cpu specifier */</span></div><div class="line">    cpu_subtype_t   cpusubtype; <span class="comment">/* machine specifier */</span></div><div class="line">    uint32_t    filetype;   <span class="comment">/* type of file */</span></div><div class="line">    uint32_t    ncmds;      <span class="comment">/* number of load commands */</span></div><div class="line">    uint32_t    sizeofcmds; <span class="comment">/* the size of all the load commands */</span></div><div class="line">    uint32_t    flags;      <span class="comment">/* flags */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">/* Constant for the magic field of the mach_header (32-bit architectures) */</span></div><div class="line"><span class="meta">#define MH_MAGIC    0xfeedface  /* the mach magic number */</span></div><div class="line"><span class="meta">#define MH_CIGAM    0xcefaedfe  /* NXSwapInt(MH_MAGIC) */</span></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> * The 64-bit mach header appears at the very beginning of object files for</div><div class="line"> * 64-bit architectures.</div><div class="line"> */</div><div class="line"><span class="keyword">struct</span> mach_header_64 &#123;</div><div class="line">    uint32_t    magic;      <span class="comment">/* mach magic number identifier */</span></div><div class="line">    cpu_type_t  cputype;    <span class="comment">/* cpu specifier */</span></div><div class="line">    cpu_subtype_t   cpusubtype; <span class="comment">/* machine specifier */</span></div><div class="line">    uint32_t    filetype;   <span class="comment">/* type of file */</span></div><div class="line">    uint32_t    ncmds;      <span class="comment">/* number of load commands */</span></div><div class="line">    uint32_t    sizeofcmds; <span class="comment">/* the size of all the load commands */</span></div><div class="line">    uint32_t    flags;      <span class="comment">/* flags */</span></div><div class="line">    uint32_t    reserved;   <span class="comment">/* reserved */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">/* Constant for the magic field of the mach_header_64 (64-bit architectures) */</span></div><div class="line"><span class="meta">#define MH_MAGIC_64 0xfeedfacf /* the 64-bit mach magic number */</span></div></pre></td></tr></table></figure>
-<div class="note danger"><p><strong>本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/">https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/</a><br><strong>转载请注明出处！</strong> </p>
+        <h2 id="ASLR-介绍"><a href="#ASLR-介绍" class="headerlink" title="ASLR 介绍"></a>ASLR 介绍</h2><p><strong>ASLR</strong>，地址空间布局随机化，是一种避免app被攻击的有效保护。</p>
+<p>进程在自己私有的虚拟地址空间中启动。传统的方式，进程每次启动时都采用固定的可预见的方式。这意味着某个给定的程序在某个给定架构上的进程初始化虚拟内存镜像都是基本一致的。而且在进程正常运行的生命周期中，大部分内存分配的操作都是按照相同的方式进行的，使得内存中的地址分布具有非常强的可预测性。</p>
+<p>这给黑客提供了更大的施展空间。黑客主要采用的方法是代码注入：通过重写内存中的函数指针，黑客就可以将程序的执行路径转到自己的代码，将程序的输入变为自己的输入。重写内存最常用的方法是采用缓冲区溢出（即利用未经保护的内存复制操作越过栈上数组的边界），将函数的返回地址重写为自己的指针。此外，任何用户指针甚至结构化的异常处理程序都可以导致代码注入。这里的关键问题在于判断重写哪些指针，也就是说，可靠地判断注入的代码应该在内存中的什么位置。</p>
+<p>采用ASLR技术，进程每次启动时，地址空间都会被简单地随机化——只是偏移，不是搅乱。实现方式是通过内核将Mach-O的段“平移”某个随机数。</p>
+<p>但是ASLR技术不是万能药。事实上，目前臭名昭著的“Star 3.0”漏洞就攻破礼物ASLR，这个漏洞越狱了iPad2上的iOS4.3。这种破解使用了Return-Oriented Programming(ROP)攻击技术，通过缓冲区溢出破坏栈，一设置完整的栈帧，模拟对libSystem的调用。</p>
+<h2 id="获取ASLR"><a href="#获取ASLR" class="headerlink" title="获取ASLR"></a>获取ASLR</h2><p>iOS上我们可以直接使用dyld.h中的方法<em>_dyld_get_image_vmaddr_slide</em>来获取image虚拟地址的偏移量。<em>_dyld_get_image_vmaddr_slide</em>函数原型如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> intptr_t   _dyld_get_image_vmaddr_slide(uint32_t image_index);</div></pre></td></tr></table></figure>
+<p>一般使用方法如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">uint32_t c = _dyld_image_count();</div><div class="line">    <span class="keyword">for</span> (uint32_t i = <span class="number">0</span>; i &lt; c; i++) &#123;</div><div class="line">     intptr_t index  = _dyld_get_image_vmaddr_slide(i);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="哪里使用"><a href="#哪里使用" class="headerlink" title="哪里使用?"></a>哪里使用?</h3><p>ALSR决定了虚拟地址在内存中会发生的偏移量。例如一个 <strong>segment_command_64</strong> 的<em>vmaddr</em> 字段决定了其在虚拟内存中的地址。但是其真正的内存地址则是<em>vmaddr</em> + <em>ALSR</em>。</p>
+<p>在fishhook中计算程序基址，使用动态符号表的虚拟地址和偏移来计算基址，具体算法如下：<br>基址 = <em>__LINKEDIT.VM_Address</em> - <em>__LINK.File_Offset</em> + <em>silde</em>的改变值<br>其中的silde就是由于ALSR所产生的随机偏移量。</p>
+<div class="note danger"><p><strong>本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_ASLR/">https://ctinusdev.github.io/2017/08/20/Mach-OBasis_ASLR/</a><br><strong>转载请注明出处！</strong> </p>
 </div>
 
       
@@ -425,7 +399,7 @@
           
             <a href="/tags/Mach-O/" rel="tag"># Mach-O</a>
           
-            <a href="/tags/mach-header/" rel="tag"># mach_header</a>
+            <a href="/tags/ASLR/" rel="tag"># ASLR</a>
           
         </div>
       
@@ -438,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/13/BSDSocketServer/" rel="next" title="iOS搭建Socket服务器的相关方法">
-                <i class="fa fa-chevron-left"></i> iOS搭建Socket服务器的相关方法
+              <a href="/2017/08/27/Mach-OBasis_Loadcommand/" rel="next" title="Mach-O文件介绍之loadcommand">
+                <i class="fa fa-chevron-left"></i> Mach-O文件介绍之loadcommand
               </a>
             
           </div>
@@ -447,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/08/27/Mach-OBasis_Loadcommand/" rel="prev" title="Mach-O文件介绍之loadcommand">
-                Mach-O文件介绍之loadcommand <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -580,7 +550,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mach-O文件介绍之mach-header"><span class="nav-number">1.</span> <span class="nav-text">Mach-O文件介绍之mach_header</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Header"><span class="nav-number">2.</span> <span class="nav-text">Header</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ASLR-介绍"><span class="nav-number">1.</span> <span class="nav-text">ASLR 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取ASLR"><span class="nav-number">2.</span> <span class="nav-text">获取ASLR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪里使用"><span class="nav-number">2.1.</span> <span class="nav-text">哪里使用?</span></a></li></ol></li></ol></div>
             
 
           </div>

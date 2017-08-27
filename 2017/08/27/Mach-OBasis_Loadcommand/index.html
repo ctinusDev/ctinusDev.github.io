@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,Mach-O,load command," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="上一篇博客介绍了mach_header相关内容，Mach-O文件介绍之mach_header。这篇博客主要介绍Mach-O 的加载命令。 Load commandMach-O文件的主要功能在于加载命令（load command）。加载命令紧跟在文件头之后，文件头中的两个字段——ncmds和sizeofncmds——用于解析加载命令。 每一条指令都采用“类型——长度——值”的格式：32位的cmd值（">
+<meta name="keywords" content="iOS,Mach-O,load command">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mach-O文件介绍之loadcommand">
+<meta property="og:url" content="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_Loadcommand/index.html">
+<meta property="og:site_name" content="ctinusDev&#39;s Blog">
+<meta property="og:description" content="上一篇博客介绍了mach_header相关内容，Mach-O文件介绍之mach_header。这篇博客主要介绍Mach-O 的加载命令。 Load commandMach-O文件的主要功能在于加载命令（load command）。加载命令紧跟在文件头之后，文件头中的两个字段——ncmds和sizeofncmds——用于解析加载命令。 每一条指令都采用“类型——长度——值”的格式：32位的cmd值（">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image1.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image2.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image3.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image4.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image5.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image6.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image7.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image8.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image9.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image10.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image11.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image12.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image13.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image14.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image15.jpg">
+<meta property="og:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image16.jpg">
+<meta property="og:updated_time" content="2017-08-27T11:19:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mach-O文件介绍之loadcommand">
+<meta name="twitter:description" content="上一篇博客介绍了mach_header相关内容，Mach-O文件介绍之mach_header。这篇博客主要介绍Mach-O 的加载命令。 Load commandMach-O文件的主要功能在于加载命令（load command）。加载命令紧跟在文件头之后，文件头中的两个字段——ncmds和sizeofncmds——用于解析加载命令。 每一条指令都采用“类型——长度——值”的格式：32位的cmd值（">
+<meta name="twitter:image" content="https://ctinusdev.github.io/images/Mach-OBasis_Loadcommand/image1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_Loadcommand/"/>
+
+
+
+
+
+  <title>Mach-O文件介绍之loadcommand | ctinusDev's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ctinusDev's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Development  Sharing</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/08/27/Mach-OBasis_Loadcommand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ctinusDev">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ctinusDev's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mach-O文件介绍之loadcommand</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T18:05:59+08:00">
+                2017-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/27/Mach-OBasis_Loadcommand/" class="leancloud_visitors" data-flag-title="Mach-O文件介绍之loadcommand">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇博客介绍了mach_header相关内容，<a href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Header/">Mach-O文件介绍之mach_header</a>。这篇博客主要介绍Mach-O 的加载命令。</p>
+<h2 id="Load-command"><a href="#Load-command" class="headerlink" title="Load command"></a>Load command</h2><p>Mach-O文件的主要功能在于加载命令（load command）。加载命令紧跟在文件头之后，文件头中的两个字段——ncmds和sizeofncmds——用于解析加载命令。</p>
+<p>每一条指令都采用“类型——长度——值”的格式：32位的cmd值（表示类型），32位的cmdsize值（32位二进制位4的倍数，64位二进制位8的倍数），以及命令本身（有cmdsize指定的任意长度）。有一些命令是由内核加载器（定义在<em>bsd/kern/mach_loader.c</em>文件中）直接使用的，其他命令是由动态连接器处理的。</p>
+<h3 id="内核加载器命令"><a href="#内核加载器命令" class="headerlink" title="内核加载器命令"></a>内核加载器命令</h3><p> 加载过程在内核的部分负责新进程的基本设置——分配虚拟内存，创建主线程，以及处理任何可能的代码签名/加密的工作。然而对于动态链接的可执行文件（大部分可执行文件都是动态链接的）来说，真正的库加载和符号解析的工作都是通过<strong>LC_LOAD_DYLINKER</strong>命令指定的动态连接器在用户态完成的。控制权会装交给连接器，链接器进而接着处理文件头中的其他加载命令。<br>加载命令总共有30多条。下表列出了<strong>内核加载器</strong>使用的命令<br><img src="/images/Mach-OBasis_Loadcommand/image1.jpg" alt=""></p>
+<p>下面详细讨论这些加载命令。</p>
+<h4 id="1、LC-SEGMENT以及进程虚拟内存设置"><a href="#1、LC-SEGMENT以及进程虚拟内存设置" class="headerlink" title="1、LC_SEGMENT以及进程虚拟内存设置"></a>1、LC_SEGMENT以及进程虚拟内存设置</h4><p>LC_SEGMENT(或LC_SEGMENT_64)命令是最主要的加载命令，这条命令知道内核如何设置新运行的进程的内存空间。这些 segment直接从Mach-O二进制文件加载到内存中。<br>每一条LC_SEGMENT命令都提供了段布局的所有必要细节信息，如下表：<br><img src="/images/Mach-OBasis_Loadcommand/image2.jpg" alt=""></p>
+<p>Objectice-C中segment加载命令的定义如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * The segment load command indicates that a part of this file is to be</div><div class="line"> * mapped into the task's address space.  The size of this segment in memory,</div><div class="line"> * vmsize, maybe equal to or larger than the amount to map from this file,</div><div class="line"> * filesize.  The file is mapped starting at fileoff to the beginning of</div><div class="line"> * the segment in memory, vmaddr.  The rest of the memory of the segment,</div><div class="line"> * if any, is allocated zero fill on demand.  The segment's maximum virtual</div><div class="line"> * memory protection and initial virtual memory protection are specified</div><div class="line"> * by the maxprot and initprot fields.  If the segment has sections then the</div><div class="line"> * section structures directly follow the segment command and their size is</div><div class="line"> * reflected in cmdsize.</div><div class="line"> */</div><div class="line"><span class="keyword">struct</span> segment_command &#123; <span class="comment">/* for 32-bit architectures */</span></div><div class="line">uint32_t cmd; <span class="comment">/* LC_SEGMENT */</span></div><div class="line">uint32_t cmdsize; <span class="comment">/* includes sizeof section structs */</span></div><div class="line"><span class="keyword">char</span> segname[<span class="number">16</span>]; <span class="comment">/* segment name */</span></div><div class="line">uint32_t vmaddr; <span class="comment">/* memory address of this segment */</span></div><div class="line">uint32_t vmsize; <span class="comment">/* memory size of this segment */</span></div><div class="line">uint32_t fileoff; <span class="comment">/* file offset of this segment */</span></div><div class="line">uint32_t filesize; <span class="comment">/* amount to map from the file */</span></div><div class="line">vm_prot_t maxprot; <span class="comment">/* maximum VM protection */</span></div><div class="line">vm_prot_t initprot; <span class="comment">/* initial VM protection */</span></div><div class="line">uint32_t nsects; <span class="comment">/* number of sections in segment */</span></div><div class="line">uint32_t flags; <span class="comment">/* flags */</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> * The 64-bit segment load command indicates that a part of this file is to be</div><div class="line"> * mapped into a 64-bit task's address space.  If the 64-bit segment has</div><div class="line"> * sections then section_64 structures directly follow the 64-bit segment</div><div class="line"> * command and their size is reflected in cmdsize.</div><div class="line"> */</div><div class="line"><span class="keyword">struct</span> segment_command_64 &#123; <span class="comment">/* for 64-bit architectures */</span></div><div class="line">uint32_t cmd; <span class="comment">/* LC_SEGMENT_64 */</span></div><div class="line">uint32_t cmdsize; <span class="comment">/* includes sizeof section_64 structs */</span></div><div class="line"><span class="keyword">char</span> segname[<span class="number">16</span>]; <span class="comment">/* segment name */</span></div><div class="line">uint64_t vmaddr; <span class="comment">/* memory address of this segment */</span></div><div class="line">uint64_t vmsize; <span class="comment">/* memory size of this segment */</span></div><div class="line">uint64_t fileoff; <span class="comment">/* file offset of this segment */</span></div><div class="line">uint64_t filesize; <span class="comment">/* amount to map from the file */</span></div><div class="line">vm_prot_t maxprot; <span class="comment">/* maximum VM protection */</span></div><div class="line">vm_prot_t initprot; <span class="comment">/* initial VM protection */</span></div><div class="line">uint32_t nsects; <span class="comment">/* number of sections in segment */</span></div><div class="line">uint32_t flags; <span class="comment">/* flags */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>对于每一个段，将文件中相对应的内容加载到内存中：<em>从偏移量为fileoff处加载filesize字节到虚拟内存地址vmaddr处的vmsize字节</em>。每一个段的页面都根据initprot进行初始化，initprot指定了如何通过读／写／执行位初始化页面保护级别。段的保护设置可以动态改变，但是不能超过maxprot中指定的值（iOS中，+x 和+w 是互斥的）。<br>          <strong>_PAGEZERO</strong>段（空指针陷阱）、<strong>_TEXT</strong>段（程序代码）、<strong>_DATA</strong>段（程序数据）和<strong>_LINKEDIT</strong>（链接器使用的符号和其他表）段提供了<strong>LC_SEGMENT</strong>命令。段也可以进一步分解为区(section).<br>Mach-O可执行文件中常见的段和区<br><img src="/images/Mach-OBasis_Loadcommand/image3.jpg" alt=""></p>
+<p>段也可以设置一些<code>&lt;mach/loader.h&gt;</code>头文件中定义的flags。其中一个flags是SG_PROTECTED_VERSION_1(0x08),表示这个段是“受保护的”，即加密的。</p>
+<h4 id="2、LC-MAIN"><a href="#2、LC-MAIN" class="headerlink" title="2、LC_MAIN"></a>2、LC_MAIN</h4><p>LC_MAIN设置程序主线程的入口地址和栈大小.<br>使用 <em>otool -l /bin/ls</em> 查看加载命令，LC_MAIN加载 命令中的entryoff指向的是main还是的入口地址。可以使用<br><em>otool -vt </em>  反编译出汇编代码，查看main函数的入口。</p>
+<p>下面是演示：<br>a.c文件中的代码</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#include <span class="meta-string">"stdio.h"</span></span></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</div><div class="line">&#123;</div><div class="line">    printf(<span class="string">"hello world/n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>1、使用 <em>gcc -g a.c -o a</em> 进行编译a.c文件。<br>2、使用 <em>otool -l /bin/ls</em> 查看a的加载命令，其中LC_MAIN加载命令如下：<br><img src="/images/Mach-OBasis_Loadcommand/image4.jpg" alt=""><br>entryoff对应的数字3920，转为16进制是 0xf50.<br>3、再使用 <em>otool -vt a</em> 反编译出汇编代码，查看main函数：<br><img src="/images/Mach-OBasis_Loadcommand/image5.jpg" alt=""></p>
+<p>可以看到main函数的首句汇编代码的地址正是 0xf50。这个位置同样也是<strong>TEXT段中，</strong>text组的起始地址<br><img src="/images/Mach-OBasis_Loadcommand/image6.jpg" alt=""></p>
+<h3 id="动态连接器命令"><a href="#动态连接器命令" class="headerlink" title="动态连接器命令"></a>动态连接器命令</h3><p>Mach-O镜像中有很多“空洞”——即对外部的库和符号的引用——这些空洞要在程序启动时填补。这项工作需要由动态链接器来完成。这个过程有时候也被称为符号绑定（binding）。</p>
+<p>动态链接器是在内核执行LC_DYLINKER加载命令时启动的，通常是使用/usr/lib/dyld作为动态链接器。<br>由dyld处理的加载命令<br><img src="/images/Mach-OBasis_Loadcommand/image7.jpg" alt=""></p>
+<p>加载命令所对应的结构体在 <code>&lt;mach-o/loader.h&gt;</code> 头文件中都可以找得到。<br>例如LC_SYMTAB的结构体如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * The symtab_command contains the offsets and sizes of the link-edit 4.3BSD</div><div class="line"> * "stab" style symbol table information as described in the header files</div><div class="line"> * &lt;nlist.h&gt; and &lt;stab.h&gt;.</div><div class="line"> */</div><div class="line"><span class="keyword">struct</span> symtab_command &#123;</div><div class="line">uint32_t cmd; <span class="comment">/* LC_SYMTAB */</span></div><div class="line">uint32_t cmdsize; <span class="comment">/* sizeof(struct symtab_command) */</span></div><div class="line">uint32_t symoff; <span class="comment">/* symbol table offset */</span></div><div class="line">uint32_t nsyms; <span class="comment">/* number of symbol table entries */</span></div><div class="line">uint32_t stroff; <span class="comment">/* string table offset */</span></div><div class="line">uint32_t strsize; <span class="comment">/* string table size in bytes */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p> iOS符号绑定分为两种：<em>non-lazy</em>和<strong>lazy</strong>绑定符号。<em>non-lazy</em>符号位于Mach-O文件<strong>__DATA Segment</strong> 的<em>__nl_symbol_ptr section</em>，<em>lazy</em>符号位于<strong>__DATA Segment</strong> 的<em>__la_symbol_ptr section</em>。对于<em>non-lazy</em>的符号绑定时机为动态库加载（load），<em>lazy</em>符号的绑定时机则与Linux相同即函数第一次被调用。<br>      在 iOS 系统中，当程序调用动态库的函数时，它实际上是执行<strong>__TEXT</strong> 段的 <em>__stubs</em> 节的代码。外部函数的地址放在 <strong>__DATA</strong> 段的<em>__la_symbol_ptr</em> 中，而<em>__stub</em> 的作用便是找到相应的 <em>__la_symbol_ptr</em>，并跳转到它所包含的地址。第一次使用printf时，<em>__la_symbol_ptr</em>中还没有记录printf的真正地址，这时的地址是指向<strong>__TEXT</strong> 段的 <em>__stub_helper</em> 节中的相关内容。<em>__stub_helper</em> 会调用 <em>dyld_stub_binder</em>(动态链接器的入口) 进行符号绑定，最后会将 printf 的地址放到 <em>__la_symbol_ptr</em> 处。</p>
+<p>这里主要讨论下lazy符号绑定。<br>测试代码 a.c</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#include <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) &#123;</div><div class="line">    <span class="comment">// insert code here...</span></div><div class="line">    printf(<span class="string">"Hello, World!\n"</span>);</div><div class="line">    printf(<span class="string">"Hello World Again!\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>1、编译代码 gcc a.c -o a</p>
+<p>2、使用lldb调试a文件  lldb a,并反编译出main函数的汇编代码<br><img src="/images/Mach-OBasis_Loadcommand/image8.jpg" alt=""></p>
+<p>3、在第一次调用printf处添加断点  b 0x100000f42 ，然后运行代码<br><img src="/images/Mach-OBasis_Loadcommand/image9.jpg" alt=""></p>
+<p>4、使用MachOView打开a文件查看<strong>TEXT段中的</strong>stubs组，可以发现printf的调用地址就是_stubs中的桩。<br><img src="/images/Mach-OBasis_Loadcommand/image10.jpg" alt=""></p>
+<p><strong>stubs会到</strong>DATA段的__la_symbol_ptr中找到函数的入口地址。<br><img src="/images/Mach-OBasis_Loadcommand/image11.jpg" alt=""></p>
+<p>在lldb中 si(step in)查看printf的执行步骤<br><img src="/images/Mach-OBasis_Loadcommand/image12.jpg" alt=""></p>
+<p>可以发现printf执行的第一条语句就是跳转到0x0000000100000f7c.这与<strong>la_symbol_ptr中printf对应的值是一致的。第一次时，这个地址并没有指向printf函数入口，而是指向了</strong>TEXT段中的__stub_helper中的地址。<br><img src="/images/Mach-OBasis_Loadcommand/image13.jpg" alt=""></p>
+<p>然后在下一条语句0x100000F81中，会跳转到__stub_helper的头部0x100000f6c。顺序执行到第三条命令就是跳转到dyld_stub_binder进行符号绑定了。</p>
+<p>5、在第二个printf出添加断点。并继续执行<br><img src="/images/Mach-OBasis_Loadcommand/image14.jpg" alt=""></p>
+<p><img src="/images/Mach-OBasis_Loadcommand/image15.jpg" alt=""></p>
+<p>6、再次si查看第二个printf的调用,这里可以看到这里第一条指令的跳转地址已经指向的真正的 printf函数入口。<br><img src="/images/Mach-OBasis_Loadcommand/image16.jpg" alt=""></p>
+<div class="note danger"><p><strong>本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Loadcommand/">https://ctinusdev.github.io/2017/08/20/Mach-OBasis_Loadcommand/</a><br><strong>转载请注明出处！</strong> </p>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="ctinusDev WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="ctinusDev Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/Mach-O/" rel="tag"># Mach-O</a>
+          
+            <a href="/tags/load-command/" rel="tag"># load command</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/20/Mach-OBasis_Header/" rel="next" title="Mach-O文件介绍之mach_header">
+                <i class="fa fa-chevron-left"></i> Mach-O文件介绍之mach_header
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/27/Mach-OBasis_ASLR/" rel="prev" title="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
+                Mach-O文件介绍之ASLR(进程地址空间布局随机化) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ctinusDev" />
+          <p class="site-author-name" itemprop="name">ctinusDev</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-command"><span class="nav-number">1.</span> <span class="nav-text">Load command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内核加载器命令"><span class="nav-number">1.1.</span> <span class="nav-text">内核加载器命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、LC-SEGMENT以及进程虚拟内存设置"><span class="nav-number">1.1.1.</span> <span class="nav-text">1、LC_SEGMENT以及进程虚拟内存设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、LC-MAIN"><span class="nav-number">1.1.2.</span> <span class="nav-text">2、LC_MAIN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态连接器命令"><span class="nav-number">1.2.</span> <span class="nav-text">动态连接器命令</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ctinusDev</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("z64DkEGmmRACgBQhankrR9CS-gzGzoHsz", "lEVwYGjtw9hocOO8l3Ycldiq");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
