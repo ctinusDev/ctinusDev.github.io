@@ -96,14 +96,14 @@
 <meta name="description" content="背景因为苹果审核禁止调用私有方法，在开发过程中很多的有用的私有方法都不能直接使用。那有没有办法可以绕开苹果对私有方法的审核呢？ 首先我们猜测下苹果的审核方式：1、通过扫描二进制文件，mach-O都保存有所有的代码中的方法名字符串，如果直接明文调用私有方法，扫描二进制文件就会被发现。2、通过运行时的方法调用检测，这种情况需要执行到对应代码才会被发现。（可以在审核界面把对应的代码屏蔽掉。） 实现如果审">
 <meta name="keywords" content="iOS,Private Method,Encrypt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOSPrivateMethodEncrypt">
+<meta property="og:title" content="iOS私有方法加密混淆">
 <meta property="og:url" content="https://ctinusdev.github.io/2018/02/25/iOSPrivateMethodEncrypt/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
 <meta property="og:description" content="背景因为苹果审核禁止调用私有方法，在开发过程中很多的有用的私有方法都不能直接使用。那有没有办法可以绕开苹果对私有方法的审核呢？ 首先我们猜测下苹果的审核方式：1、通过扫描二进制文件，mach-O都保存有所有的代码中的方法名字符串，如果直接明文调用私有方法，扫描二进制文件就会被发现。2、通过运行时的方法调用检测，这种情况需要执行到对应代码才会被发现。（可以在审核界面把对应的代码屏蔽掉。） 实现如果审">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-25T09:20:01.431Z">
+<meta property="og:updated_time" content="2018-02-25T09:37:17.102Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOSPrivateMethodEncrypt">
+<meta name="twitter:title" content="iOS私有方法加密混淆">
 <meta name="twitter:description" content="背景因为苹果审核禁止调用私有方法，在开发过程中很多的有用的私有方法都不能直接使用。那有没有办法可以绕开苹果对私有方法的审核呢？ 首先我们猜测下苹果的审核方式：1、通过扫描二进制文件，mach-O都保存有所有的代码中的方法名字符串，如果直接明文调用私有方法，扫描二进制文件就会被发现。2、通过运行时的方法调用检测，这种情况需要执行到对应代码才会被发现。（可以在审核界面把对应的代码屏蔽掉。） 实现如果审">
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title>iOSPrivateMethodEncrypt | ctinusDev's Blog</title>
+  <title>iOS私有方法加密混淆 | ctinusDev's Blog</title>
   
 
 
@@ -274,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOSPrivateMethodEncrypt</h1>
+          <h1 class="post-title" itemprop="name headline">iOS私有方法加密混淆</h1>
         
 
         <div class="post-meta">
@@ -304,7 +304,7 @@
 
           
           
-             <span id="/2018/02/25/iOSPrivateMethodEncrypt/" class="leancloud_visitors" data-flag-title="iOSPrivateMethodEncrypt">
+             <span id="/2018/02/25/iOSPrivateMethodEncrypt/" class="leancloud_visitors" data-flag-title="iOS私有方法加密混淆">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -343,6 +343,8 @@
 <blockquote>
 <p>注：虽然我们可以使用这种方法避开以上两种苹果的审核，但是也应该尽量避免使用私有方法。我们无法保证那天苹果的审核会不会升级，增加什么新的审核逻辑。</p>
 </blockquote>
+<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2018/02/25/iOSPrivateMethodEncrypt">https://ctinusdev.github.io/2018/02/25/iOSPrivateMethodEncrypt</a><br><strong>转载请注明出处！</strong> </p>
+</div>
 
       
     </div>
@@ -410,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/27/Mach-OBasis_ASLR/" rel="next" title="Mach-O文件介绍之ASLR(进程地址空间布局随机化)">
-                <i class="fa fa-chevron-left"></i> Mach-O文件介绍之ASLR(进程地址空间布局随机化)
+              <a href="/2017/08/27/Mach-OBasis_Loadcommand/" rel="next" title="Mach-O文件介绍之loadcommand">
+                <i class="fa fa-chevron-left"></i> Mach-O文件介绍之loadcommand
               </a>
             
           </div>
