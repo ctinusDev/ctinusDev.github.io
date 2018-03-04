@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
 <meta property="og:description" content="陈通    求职意向：iOS开发个人信息电话：13058135996        邮箱：1158433594@qq.com毕业院校：福建师范大学   专业：软件工程          学位：本科技术博客：https://ctinusdev.github.ioGithub：https://github.com/ctinusDev 个人简介目前就职于深信服科技股份有限公司，主要负责口袋助理App i">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-04T10:49:53.169Z">
+<meta property="og:updated_time" content="2018-03-04T14:55:05.247Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="个人简历">
 <meta name="twitter:description" content="陈通    求职意向：iOS开发个人信息电话：13058135996        邮箱：1158433594@qq.com毕业院校：福建师范大学   专业：软件工程          学位：本科技术博客：https://ctinusdev.github.ioGithub：https://github.com/ctinusDev 个人简介目前就职于深信服科技股份有限公司，主要负责口袋助理App i">
@@ -336,7 +336,7 @@
 <h2 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h2><p>2014-6～至今，深信服科技 口袋科技  职称：高级设计师  负责产品：口袋助理</p>
 <h2 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h2><p><strong>应用热更新方案</strong><br>工作内容：<br>自JSPatch被苹果禁止以来，项目就急需要一个能够满足要求的热更新方案，来帮助App实时的解决一些在线问题和一些临时小需求变更。于是打算自己实现一套Objective-C语法解析器，通过直接下发的OC代码替换已有的方法，项目中我主要完成了一下功能点：<br>1、将OC方法解析成方法调用、表达式运算、循环语句、条件判断等语法节点，然后在运行时利用runtime动态替换方法，将原方法实现替换成这些语法节点构成的新实现，方法被调用时解释执行这些语法节点，从而实现App在线修复。<br>2、为了避开苹果对热更新的检测，对关键类和方法进行了名称混淆；对runtime的方法替换相关的函数先取到函数指针，然后通过函数指针间接调用相关函数。<br>3、为了补丁文件的安全，补丁使用了SHA1算法生成hash，再利用RSA算法私钥对hash进行签名，防止热更新文件被修改。客户端请求文件时会使用RSA公钥加密一段随机字符串，服务端会根据这个数据字符串使用AES128算法对文件加密在下发到客户端，做到补丁代码逻辑传输过程中不可见。<br>该方案自2017年底上线以来，已经帮助App解决了3个在线问题，有效降低了App的发包次数。</p>
 <p><strong>App性能相关工作</strong><br>工作内容：<br>当项目开发到了一定程度，性能相关的优化工作就显得十分重要了，在此项目中我主要负责了一下几点工作：<br>1、实现了UI线程的卡顿监控，方便在运行时动态检测App的卡顿点，并将UI线程调用堆栈信息上传到日志系统，帮助发现用户反馈的卡顿问题。<br>2、优化富文本在列表中的显示，实现了CoreText异步绘制图片和cell高度计算缓存等。通过这两点功能的实现，列表滑动的FPS从之前的20-30fps改善到了50fps左右，明显改善了富文本卡顿的问题。<br>3、分析崩溃日志，总结崩溃原因分类，并实现了一套app崩溃自动修复方案；<br>4、对野指针出现的情况进行了分析并提出了相应的解决方案。并实现了一套野指针检测修复方案。从代码编写层面降低了野指针概率，同时崩溃统计中野指针相关的崩溃也从50%左右降低到了20%左右。</p>
-<p><strong>企业云盘</strong><br>工作内容：<br>主要负责百度云盘的功能，包括文件夹创建、文件的上传下载、文件的在线预览、文件分享等功能。企业云盘的功能并不复杂，但是确实包含了比较多的技术点，包括基于AFNetWorking实现了文件后台下载、文件断点续传，实现了文件内存缓存和磁盘缓存双缓存策略和LRU缓存清除策略，基于ImageIO实现了大图片预览异步解码。</p>
+<p><strong>企业云盘</strong><br>工作内容：<br>主要负责企业云盘的功能，包括文件夹创建、文件的上传下载、文件的在线预览、文件分享等功能。企业云盘的功能并不复杂，但是却包含了比较多的技术点，包括基于AFNetWorking实现了文件后台下载、文件断点续传，实现了文件内存缓存和磁盘缓存双缓存策略和LRU缓存清除策略，基于ImageIO实现了大图片预览异步解码等。通过对这些功能点的实现，加强了对相关技术的认知，同时也对项目的公共组建有所改进。例如，之前的大图片预览使用CGBitmapContextCreate进行原图解码缩放，后面发现使用ImageIO对像素特别大的图片进行解码内存和时间上明显优于CGBitmapContextCreate，所以对于大图片的解码改用了ImageIO。</p>
 <h2 id="技能"><a href="#技能" class="headerlink" title="技能"></a>技能</h2><p>熟悉Objective-C开发，熟悉CoreData、runtime、NSThread、NSOperation、GCD等系统框架的开发，熟悉实用finshhook、AFNetworking等第三方框架，了解Swift、JavaScript、Shell等开发。</p>
 <h2 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h2><p><a href="https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/">为什么不能runtime创建JSExport类型的Protocol？</a><br><a href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">ARC下野指针常见写法</a></p>
 
