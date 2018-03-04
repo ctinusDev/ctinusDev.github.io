@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>https://ctinusdev.github.io/2016/05/10/BackgroundTask/</loc>
-    <lastmod>2018-03-04T06:27:04.036Z</lastmod>
+    <loc>https://ctinusdev.github.io/2018/03/04/Resume/</loc>
+    <lastmod>2018-03-04T10:49:53.169Z</lastmod>
     <data>
         <display>
-        <title>iOS后台运行的相关方案总结</title>
-        <pubTime>2016-05-10T14:27:52.000Z</pubTime>
+        <title>个人简历</title>
+        <pubTime>2018-03-04T10:49:26.000Z</pubTime>
         
          
            
@@ -20,11 +20,26 @@
     
   <url>
     <loc>https://ctinusdev.github.io/2016/04/01/PrintRedirect/</loc>
-    <lastmod>2018-03-03T14:22:12.866Z</lastmod>
+    <lastmod>2018-03-04T06:28:07.499Z</lastmod>
     <data>
         <display>
         <title>iOS输出重定向</title>
         <pubTime>2016-04-01T14:11:33.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://ctinusdev.github.io/2016/05/10/BackgroundTask/</loc>
+    <lastmod>2018-03-04T06:27:04.036Z</lastmod>
+    <data>
+        <display>
+        <title>iOS后台运行的相关方案总结</title>
+        <pubTime>2016-05-10T14:27:52.000Z</pubTime>
         
          
            
@@ -164,32 +179,6 @@
 
     
   <url>
-    <loc>https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/</loc>
-    <lastmod>2017-08-20T10:05:57.000Z</lastmod>
-    <data>
-        <display>
-        <title>为什么不能runtime创建JSExport类型的Protocol？</title>
-        <pubTime>2017-08-05T10:08:18.000Z</pubTime>
-        
-        <tag>iOS</tag>
-         
-        <tag>runtime</tag>
-         
-        <tag>JSExport</tag>
-         
-        <tag>JavaScriptCore</tag>
-         
-         
-           
-             
-              <breadCrumb title="iOS" url="https://ctinusdev.github.io/categories/iOS/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://ctinusdev.github.io/2017/08/13/BSDSocketServer/</loc>
     <lastmod>2017-08-20T10:05:57.000Z</lastmod>
     <data>
@@ -206,6 +195,32 @@
         <tag>GCD</tag>
          
         <tag>Server</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS" url="https://ctinusdev.github.io/categories/iOS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/</loc>
+    <lastmod>2017-08-20T10:05:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>为什么不能runtime创建JSExport类型的Protocol？</title>
+        <pubTime>2017-08-05T10:08:18.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+        <tag>runtime</tag>
+         
+        <tag>JSExport</tag>
+         
+        <tag>JavaScriptCore</tag>
          
          
            

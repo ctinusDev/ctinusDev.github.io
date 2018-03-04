@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iOS,Wild Pointer," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,17 @@
 
 
 
-<meta name="description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
-<meta name="keywords" content="iOS,Wild Pointer">
+<meta name="description" content="陈通    求职意向：iOS开发个人信息电话：13058135996        邮箱：1158433594@qq.com毕业院校：福建师范大学   专业：软件工程          学位：本科技术博客：https://ctinusdev.github.ioGithub：https://github.com/ctinusDev 个人简介目前就职于深信服科技股份有限公司，主要负责口袋助理App i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ARC下野指针常见写法">
-<meta property="og:url" content="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/index.html">
+<meta property="og:title" content="个人简历">
+<meta property="og:url" content="https://ctinusdev.github.io/2018/03/04/Resume/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
-<meta property="og:description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
+<meta property="og:description" content="陈通    求职意向：iOS开发个人信息电话：13058135996        邮箱：1158433594@qq.com毕业院校：福建师范大学   专业：软件工程          学位：本科技术博客：https://ctinusdev.github.ioGithub：https://github.com/ctinusDev 个人简介目前就职于深信服科技股份有限公司，主要负责口袋助理App i">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-03T13:28:48.782Z">
+<meta property="og:updated_time" content="2018-03-04T10:49:53.169Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ARC下野指针常见写法">
-<meta name="twitter:description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
+<meta name="twitter:title" content="个人简历">
+<meta name="twitter:description" content="陈通    求职意向：iOS开发个人信息电话：13058135996        邮箱：1158433594@qq.com毕业院校：福建师范大学   专业：软件工程          学位：本科技术博客：https://ctinusdev.github.ioGithub：https://github.com/ctinusDev 个人简介目前就职于深信服科技股份有限公司，主要负责口袋助理App i">
 
 
 
@@ -132,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/"/>
+  <link rel="canonical" href="https://ctinusdev.github.io/2018/03/04/Resume/"/>
 
 
 
 
 
-  <title>ARC下野指针常见写法 | ctinusDev's Blog</title>
+  <title>个人简历 | ctinusDev's Blog</title>
   
 
 
@@ -257,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2018/03/04/Resume/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ctinusDev">
@@ -274,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ARC下野指针常见写法</h1>
+          <h1 class="post-title" itemprop="name headline">个人简历</h1>
         
 
         <div class="post-meta">
@@ -286,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-03T21:01:35+08:00">
-                2017-03-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-04T18:49:26+08:00">
+                2018-03-04
               </time>
             
 
@@ -304,7 +303,7 @@
 
           
           
-             <span id="/2017/03/03/WriteWildPointer/" class="leancloud_visitors" data-flag-title="ARC下野指针常见写法">
+             <span id="/2018/03/04/Resume/" class="leancloud_visitors" data-flag-title="个人简历">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -332,29 +331,14 @@
       
 
       
-        <p>野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。</p>
-<h2 id="1、对象释放后，指针没有置空。"><a href="#1、对象释放后，指针没有置空。" class="headerlink" title="1、对象释放后，指针没有置空。"></a>1、对象释放后，指针没有置空。</h2><h3 id="常见写法1："><a href="#常见写法1：" class="headerlink" title="常见写法1："></a>常见写法1：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, unsafe_unretained) id obj;</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br><code>unsafe_unretained</code>申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。<br><strong>解决方案：</strong><br>尽量使用<code>weak|strong|copy</code>等来代替<code>unsafe_unretained</code>来修饰属性。如果一定要使用<code>unsafe_unretained</code>，记得对象释放后，将指针置空。</p>
-<h3 id="常见写法2"><a href="#常见写法2" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><p>在<code>objc_setAssociatedObject</code>方法中该用<code>OBJC_ASSOCIATION_RETAIN_NONATOMIC</code>修饰的对象误用成<code>OBJC_ASSOCIATION_ASSIGN</code><br><strong>问题原因：</strong><br>这个问题和上面的<strong>常见写法1</strong>问题是类似的，就不重复了。</p>
-<h3 id="常见写法3："><a href="#常见写法3：" class="headerlink" title="常见写法3："></a>常见写法3：</h3><p>NSNotification/KVO 只addObserver并没有removeObserver</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@interface viewController: UIViewController</div><div class="line">@property (nonatomic, strong) id obj;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation viewController</div><div class="line"></div><div class="line">-(void)someButtonClick:(id)sender</div><div class="line">&#123;</div><div class="line">    [self.obj addObserver:self forKeyPath:@&quot;someKey&quot; options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];</div><div class="line">&#125;</div><div class="line">-(void)dealloc</div><div class="line">&#123;</div><div class="line">    //没有移除观察者</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br>self.obj添加了self作为观察者后，是通过<code>unsafe_unretained</code>指针引用的self，如果对象释放之前不移除观察，self.obj对应keyPath发生变化时，仍然会去尝试给self指向的对象发送通知。就可能会出现野指针了。<br><strong>解决方案：</strong><br>1、原始方法，记得addObserver和removeObserver成对出现。<br>2、利用KVOController</p>
-<h2 id="2、对象提前释放了"><a href="#2、对象提前释放了" class="headerlink" title="2、对象提前释放了"></a>2、对象提前释放了</h2><h3 id="常见写法1：-1"><a href="#常见写法1：-1" class="headerlink" title="常见写法1："></a>常见写法1：</h3><p>异步方法block回调中，没有强引用self。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">__weak typeof(self) weakself = self;</div><div class="line">[obj method:^(id result) &#123;</div><div class="line">    [weakself someMethod];</div><div class="line">&#125;];</div><div class="line">-(void)someMethod</div><div class="line">&#123;</div><div class="line">    self.test = ....;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br>ARC下，由于性能原因self既不是strong也不是weak，而是<code>unsafe_unretained</code>的。上面代码block并没有引用强引用self。若是在执行[weakSelf someMethod]时，刚好self被释放了，那么self.test 这句的执行就有可能造成野指针崩溃。<br><strong>解决方案：</strong><br>在进入block时，先强引用weakself。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">__weak typeof(self) weakself = self;</div><div class="line">    [obj method:^(id result) &#123;</div><div class="line">        __strong typeof(self) strongself = weakSelf;</div><div class="line">        [strongself someMethod];</div><div class="line">    &#125;];</div></pre></td></tr></table></figure>
-<h3 id="常见写法2-1"><a href="#常见写法2-1" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@interface viewController: UIViewController</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation viewController</div><div class="line"></div><div class="line">-(void)someButtonClick:(id)sender</div><div class="line">&#123;</div><div class="line">    [self.navigationController popViewControllerAnimated:NO];</div><div class="line">    </div><div class="line">    [self someMethod];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br>由于self在pop之后就会被释放，在pop之后，继续使用self，就可能会导致野指针。<br><strong>解决方案：</strong><br>在pop和dismiss之后不要在使用self，关于self的操作都在pop和dismiss之前。</p>
-<h2 id="3、对象的多次释放。"><a href="#3、对象的多次释放。" class="headerlink" title="3、对象的多次释放。"></a>3、对象的多次释放。</h2><h3 id="常见写法1"><a href="#常见写法1" class="headerlink" title="常见写法1:"></a>常见写法1:</h3><p>多个线程同时对某个对象赋值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@interface SomeClass: NSObject</div><div class="line">@property (nonatomic, strong) NSArray *array;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation SomeClass</div><div class="line"></div><div class="line">- (void)viewDidLoad</div><div class="line">&#123;</div><div class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">        self.array = @[@&quot;test&quot;];</div><div class="line">    &#125;);</div><div class="line">    self.array = @[@&quot;test&quot;];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br>在调用setArray:时，新的值会被retain，旧的值会被release。如果两个线程同时执行了setArray:,那么旧的值就可能会release放两次。</p>
-<p><strong>解决方案：</strong><br>找个问题不难解决，对象赋之前先加锁，再赋值就可以解决这类问题。</p>
-<h3 id="常见写法2-2"><a href="#常见写法2-2" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><p>CoreFoundation层对象Toll-Free Bridging到Foundation层中，已经用了__bridge_transfer关键字转移了对象的所有权之后，又对CoreFoundation层对象调用了一次CFRelease</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CFUUIDRef uuid = CFUUIDCreate(NULL);</div><div class="line">CFStringRef cfString = CFUUIDCreateString(NULL, uuid);</div><div class="line">NSString *string = (__bridge_transfer NSString *)cfString;</div><div class="line">CFRelease(cfString);</div></pre></td></tr></table></figure>
-<p><strong>问题原因：</strong><br>使用<code>__bridge_transfer</code>之后，cfString的所有权已经交由ARC处理，这时再次接手动调用release，会导致重复释放的问题。</p>
-<p><strong>解决方案：</strong><br>1、将<code>__bridge_transfer</code>改为<code>__bridge</code>，不转移对象的所有权。<br>2、去掉<code>CFRelease(cfString)</code>；</p>
-<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">https://ctinusdev.github.io/2017/03/03/WriteWildPointer/</a><br><strong>转载请注明出处！</strong> </p>
-</div>
+        <h1 id="陈通-求职意向：iOS开发"><a href="#陈通-求职意向：iOS开发" class="headerlink" title="陈通    求职意向：iOS开发"></a>陈通    求职意向：iOS开发</h1><h2 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h2><p>电话：13058135996        邮箱：1158433594@qq.com<br>毕业院校：福建师范大学   专业：软件工程          学位：本科<br>技术博客：<a href="https://ctinusdev.github.io">https://ctinusdev.github.io</a><br>Github：<a href="https://github.com/ctinusDev" target="_blank" rel="external">https://github.com/ctinusDev</a></p>
+<h2 id="个人简介"><a href="#个人简介" class="headerlink" title="个人简介"></a>个人简介</h2><p>目前就职于深信服科技股份有限公司，主要负责口袋助理App iOS版开发、维护、性能优化等工作。同时也负责配合客服帮助解决客户疑问和线上问题的排查。<br>自 2014 年开始参与口袋助理项目开发，至今已有 3 年多时间。在此期间熟练掌握Objective-C 代码的编写。熟悉大部分 iOS 开发与调试工具，理解 iOS App 结构与运行机制，注重代码质量与执行效率。<br>日常开发过程中对代码的整理，总结了一套实用的基础工具库。对在线崩溃问题的整理分析并通过查阅资料和博客，编写了一套可以自动修复App崩溃框架–Crair。对野指针常见的写法进行了整理并提出了相应解决方案，同时实现了一套野指针运行时检测机制。<br>当前正在学习 Swift 语言，也会写一些简单的javascript和shell。<br>寻觅一份 iOS 开发的全职正式工作，也可以根据具体情况考虑其它相关岗位。</p>
+<h2 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h2><p>2014-6～至今，深信服科技 口袋科技  职称：高级设计师  负责产品：口袋助理</p>
+<h2 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h2><p><strong>应用热更新方案</strong><br>工作内容：<br>自JSPatch被苹果禁止以来，项目就急需要一个能够满足要求的热更新方案，来帮助App实时的解决一些在线问题和一些临时小需求变更。于是打算自己实现一套Objective-C语法解析器，通过直接下发的OC代码替换已有的方法，项目中我主要完成了一下功能点：<br>1、将OC方法解析成方法调用、表达式运算、循环语句、条件判断等语法节点，然后在运行时利用runtime动态替换方法，将原方法实现替换成这些语法节点构成的新实现，方法被调用时解释执行这些语法节点，从而实现App在线修复。<br>2、为了避开苹果对热更新的检测，对关键类和方法进行了名称混淆；对runtime的方法替换相关的函数先取到函数指针，然后通过函数指针间接调用相关函数。<br>3、为了补丁文件的安全，补丁使用了SHA1算法生成hash，再利用RSA算法私钥对hash进行签名，防止热更新文件被修改。客户端请求文件时会使用RSA公钥加密一段随机字符串，服务端会根据这个数据字符串使用AES128算法对文件加密在下发到客户端，做到补丁代码逻辑传输过程中不可见。<br>该方案自2017年底上线以来，已经帮助App解决了3个在线问题，有效降低了App的发包次数。</p>
+<p><strong>App性能相关工作</strong><br>工作内容：<br>当项目开发到了一定程度，性能相关的优化工作就显得十分重要了，在此项目中我主要负责了一下几点工作：<br>1、实现了UI线程的卡顿监控，方便在运行时动态检测App的卡顿点，并将UI线程调用堆栈信息上传到日志系统，帮助发现用户反馈的卡顿问题。<br>2、优化富文本在列表中的显示，实现了CoreText异步绘制图片和cell高度计算缓存等。通过这两点功能的实现，列表滑动的FPS从之前的20-30fps改善到了50fps左右，明显改善了富文本卡顿的问题。<br>3、分析崩溃日志，总结崩溃原因分类，并实现了一套app崩溃自动修复方案；<br>4、对野指针出现的情况进行了分析并提出了相应的解决方案。并实现了一套野指针检测修复方案。从代码编写层面降低了野指针概率，同时崩溃统计中野指针相关的崩溃也从50%左右降低到了20%左右。</p>
+<p><strong>企业云盘</strong><br>工作内容：<br>主要负责百度云盘的功能，包括文件夹创建、文件的上传下载、文件的在线预览、文件分享等功能。企业云盘的功能并不复杂，但是确实包含了比较多的技术点，包括基于AFNetWorking实现了文件后台下载、文件断点续传，实现了文件内存缓存和磁盘缓存双缓存策略和LRU缓存清除策略，基于ImageIO实现了大图片预览异步解码。</p>
+<h2 id="技能"><a href="#技能" class="headerlink" title="技能"></a>技能</h2><p>熟悉Objective-C开发，熟悉CoreData、runtime、NSThread、NSOperation、GCD等系统框架的开发，熟悉实用finshhook、AFNetworking等第三方框架，了解Swift、JavaScript、Shell等开发。</p>
+<h2 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h2><p><a href="https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/">为什么不能runtime创建JSExport类型的Protocol？</a><br><a href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">ARC下野指针常见写法</a></p>
 
       
     </div>
@@ -403,14 +387,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/iOS/" rel="tag"># iOS</a>
-          
-            <a href="/tags/Wild-Pointer/" rel="tag"># Wild Pointer</a>
-          
-        </div>
-      
 
       
       
@@ -420,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/10/BackgroundTask/" rel="next" title="iOS后台运行的相关方案总结">
-                <i class="fa fa-chevron-left"></i> iOS后台运行的相关方案总结
+              <a href="/2018/02/25/iOSPrivateMethodEncrypt/" rel="next" title="iOS私有方法加密混淆">
+                <i class="fa fa-chevron-left"></i> iOS私有方法加密混淆
               </a>
             
           </div>
@@ -429,10 +405,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/29/FileCache/" rel="prev" title="iOS文件缓存">
-                iOS文件缓存 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -562,7 +534,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、对象释放后，指针没有置空。"><span class="nav-number">1.</span> <span class="nav-text">1、对象释放后，指针没有置空。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1："><span class="nav-number">1.1.</span> <span class="nav-text">常见写法1：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2"><span class="nav-number">1.2.</span> <span class="nav-text">常见写法2:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法3："><span class="nav-number">1.3.</span> <span class="nav-text">常见写法3：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、对象提前释放了"><span class="nav-number">2.</span> <span class="nav-text">2、对象提前释放了</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1：-1"><span class="nav-number">2.1.</span> <span class="nav-text">常见写法1：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2-1"><span class="nav-number">2.2.</span> <span class="nav-text">常见写法2:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、对象的多次释放。"><span class="nav-number">3.</span> <span class="nav-text">3、对象的多次释放。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1"><span class="nav-number">3.1.</span> <span class="nav-text">常见写法1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2-2"><span class="nav-number">3.2.</span> <span class="nav-text">常见写法2:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#陈通-求职意向：iOS开发"><span class="nav-number">1.</span> <span class="nav-text">陈通    求职意向：iOS开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#个人信息"><span class="nav-number">1.1.</span> <span class="nav-text">个人信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个人简介"><span class="nav-number">1.2.</span> <span class="nav-text">个人简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作经历"><span class="nav-number">1.3.</span> <span class="nav-text">工作经历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目经验"><span class="nav-number">1.4.</span> <span class="nav-text">项目经验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技能"><span class="nav-number">1.5.</span> <span class="nav-text">技能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术文章"><span class="nav-number">1.6.</span> <span class="nav-text">技术文章</span></a></li></ol></li></ol></div>
             
 
           </div>
