@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS后台运行的相关方案总结">
+<meta property="og:url" content="https://ctinusdev.github.io/2016/05/10/BackgroundTask/index.html">
+<meta property="og:site_name" content="ctinusDev&#39;s Blog">
+<meta property="og:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ctinusdev.github.io/images/BackgroundTask/image1.png">
+<meta property="og:image" content="https://ctinusdev.github.io/images/BackgroundTask/image2.png">
+<meta property="og:updated_time" content="2018-03-03T15:03:49.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS后台运行的相关方案总结">
+<meta name="twitter:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta name="twitter:image" content="https://ctinusdev.github.io/images/BackgroundTask/image1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ctinusdev.github.io/2016/05/10/BackgroundTask/"/>
+
+
+
+
+
+  <title>iOS后台运行的相关方案总结 | ctinusDev's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ctinusDev's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Development  Sharing</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2016/05/10/BackgroundTask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ctinusDev">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ctinusDev's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS后台运行的相关方案总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-10T22:27:52+08:00">
+                2016-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/05/10/BackgroundTask/" class="leancloud_visitors" data-flag-title="iOS后台运行的相关方案总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1、完全不申请后台运行"><a href="#1、完全不申请后台运行" class="headerlink" title="1、完全不申请后台运行"></a>1、完全不申请后台运行</h2><p>一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。</p>
+<h2 id="2、申请3分钟的后台运行时间"><a href="#2、申请3分钟的后台运行时间" class="headerlink" title="2、申请3分钟的后台运行时间"></a>2、申请3分钟的后台运行时间</h2><p>在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">UIBackgroundTaskIdentifier</span>)beginBackgroundTaskWithExpirationHandler:(<span class="keyword">void</span>(^ __<span class="keyword">nullable</span>)(<span class="keyword">void</span>))handler  <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">4</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div><div class="line">- (<span class="built_in">UIBackgroundTaskIdentifier</span>)beginBackgroundTaskWithName:(<span class="keyword">nullable</span> <span class="built_in">NSString</span> *)taskName expirationHandler:(<span class="keyword">void</span>(^ __<span class="keyword">nullable</span>)(<span class="keyword">void</span>))handler <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div><div class="line">- (<span class="keyword">void</span>)endBackgroundTask:(<span class="built_in">UIBackgroundTaskIdentifier</span>)identifier <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">4</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div></pre></td></tr></table></figure>
+<p>在使用方法大致如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">__block <span class="built_in">UIBackgroundTaskIdentifier</span> identifer = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">identifer = [[<span class="built_in">UIApplication</span> sharedApplication] beginBackgroundTaskWithName:<span class="string">@"msg_sync"</span> expirationHandler:^&#123;</div><div class="line">     <span class="keyword">if</span>(identifer != <span class="built_in">UIBackgroundTaskInvalid</span>) &#123;</div><div class="line">        [[<span class="built_in">UIApplication</span> sharedApplication] endBackgroundTask:identifer];</div><div class="line">        identifer = <span class="built_in">UIBackgroundTaskInvalid</span>;</div><div class="line">     &#125;</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>我们可以看到通过调用<code>beginBackgroundTaskWithName:expirationHandler:</code>我们获取到了3分钟的后台运行时间。在时间到后<code>expirationHandler</code>的handler回调会触发。这时我们必须要调用<code>endBackgroundTask</code>来停止后台运行，否则App进程可能会被系统kill掉。<br>剩余的后台运行时间我们可以通过<code>backgroundTimeRemaining</code>来获取。</p>
+<h2 id="3、伪无限后台"><a href="#3、伪无限后台" class="headerlink" title="3、伪无限后台"></a>3、伪无限后台</h2><p>伪无限后台，需要结合BackgroundModes和方法2。需要我们申请后台运行权限。这里常用的方法就是播放一个无声音乐，来让用户感知不到后台的存在。实现过程：<br>• 首先需要申请后台播放音乐权限：<br><img src="/images/BackgroundTask/image1.png" alt=""><br>• 接下来就是进入后台后，不断的轮播无声音乐和通过方法2申请后台三分钟的运行时间。代码如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSTimer</span> *timer = <span class="literal">nil</span>;</div><div class="line"><span class="built_in">BOOL</span> background = <span class="literal">NO</span> ;</div><div class="line"><span class="built_in">AVAudioPlayer</span> *player = <span class="literal">nil</span>;</div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidEnterBackground:) name:<span class="built_in">UIApplicationDidEnterBackgroundNotification</span> object:<span class="literal">nil</span>];</div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationWillEnterForeground:) name:<span class="built_in">UIApplicationWillEnterForegroundNotification</span> object:<span class="literal">nil</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)applicationDidEnterBackground:(<span class="built_in">NSNotification</span> *)notifi</div><div class="line">&#123;</div><div class="line">    background = <span class="literal">YES</span>;</div><div class="line">    timer = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">10</span> target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(countTime) userInfo:<span class="literal">nil</span> repeats:<span class="literal">YES</span>];</div><div class="line">    [[<span class="built_in">NSRunLoop</span> currentRunLoop] addTimer:timer forMode:<span class="built_in">NSRunLoopCommonModes</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)applicationWillEnterForeground:(<span class="built_in">NSNotification</span> *)notifi</div><div class="line">&#123;</div><div class="line">    background = <span class="literal">NO</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)countTime&#123;</div><div class="line">    <span class="keyword">if</span> (background == <span class="literal">NO</span>) &#123;</div><div class="line">        [timer invalidate];</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> ([[<span class="built_in">UIApplication</span> sharedApplication] backgroundTimeRemaining] &lt; <span class="number">60.</span>) &#123;<span class="comment">//当剩余时间小于60时，开如播放音乐，并用这个假前台状态再次申请后台</span></div><div class="line">        [<span class="keyword">self</span> playMusic];</div><div class="line">        <span class="comment">//申请后台</span></div><div class="line">        [[<span class="built_in">UIApplication</span> sharedApplication] beginBackgroundTaskWithExpirationHandler:^&#123;</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"我要挂起了"</span>);</div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)playMusic&#123;</div><div class="line">    <span class="built_in">NSURL</span> *url=[[<span class="built_in">NSBundle</span> mainBundle]URLForResource:<span class="string">@"silence.mp3"</span> withExtension:Nil];</div><div class="line">    player=[[<span class="built_in">AVAudioPlayer</span> alloc]initWithContentsOfURL:url error:Nil];</div><div class="line">    [player prepareToPlay];</div><div class="line">    [player play];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="4、后台唤醒"><a href="#4、后台唤醒" class="headerlink" title="4、后台唤醒"></a>4、后台唤醒</h2><p>当应用进入后台后，如果已经处于挂起状态或者已经被杀死了有没有什么办法可以自动唤醒App呢？答案是有。<br>系统给了我们很多可以后台唤醒应用的方案，下面就来一一介绍：</p>
+<h3 id="利用CLLocationManager"><a href="#利用CLLocationManager" class="headerlink" title="利用CLLocationManager"></a>利用CLLocationManager</h3><p>CLLocationManager两种方式可以在后台唤醒App：</p>
+<ul>
+<li>使用关键位置定位startMonitoringSignificantLocationChanges</li>
+<li>使用区域检测Region Monitoring</li>
+</ul>
+<p>startMonitoringSignificantLocationChanges使用的是基站定位，会在定位基站发生变化时回调结果。Region Monitoring则是需要用户建立一个地理围栏， 只有用户在进出地理围栏时才会在后台唤醒App。<br>对于后台唤醒策略来说，startMonitoringSignificantLocationChanges会更加具有可行性。<br>但是这个方法有个很大的缺点：即使监测到基站位置发生了变化，系统也不会即使唤醒App，官方文档上写的时间是15分钟，但实际测试这个时间并不固定，还可能会更大。</p>
+<h3 id="iOS静默推送"><a href="#iOS静默推送" class="headerlink" title="iOS静默推送"></a>iOS静默推送</h3><h5 id="先看看静默推送与普通推送的区别："><a href="#先看看静默推送与普通推送的区别：" class="headerlink" title="先看看静默推送与普通推送的区别："></a>先看看静默推送与普通推送的区别：</h5><p>普通推送：收到推送后（有文字有声音），点开通知，进入APP后，才执行<br><code>-application:didReceiveRemoteNotification:fetchCompletionHandler:</code></p>
+<p>静默推送：收到推送（没有文字没有声音），不用点开通知，不用打开APP，就能执行<br><code>-application:didReceiveRemoteNotification:fetchCompletionHandler:</code>，用户完全感知不到。</p>
+<h5 id="静默推送的使用："><a href="#静默推送的使用：" class="headerlink" title="静默推送的使用："></a>静默推送的使用：</h5><p>静默推送不仅在定义上和其他的推送方式不同，在推送内容上也和其他推送不同。在后台给应用的推送内容中只要满足下面的条件，该推送就是静默推送：</p>
+<blockquote>
+<p>如果只携带content-available: 1 不携带任何badge，sound 和消息内容等参数，则可以不打扰用户的情况下进行内容更新等操作即为“Silent Remote Notifications”<em>**</em>。</p>
+</blockquote>
+<p><img src="/images/BackgroundTask/image2.png" alt=""><br><em>静默推送的缺点是：</em><br>    1、如果应用已经被Kill。是无法自动拉起应用的。所以它自能在应用后台挂起的情况下使用。<br>    2、静默推送和startMonitoringSignificantLocationChanges一样都无法保证应用被实时唤醒。官网说法如下：<br>    静默推送不是让您的应用程序在快速刷新操作之后保持醒来的方式，也不是用于高优先级更新的方式。APN将后台更新通知视为低优先级，如果总数过多，APN可能会将其传输完全限制在一定程度。实际的限制是动态的，可以根据条件进行更改，但不要每小时发送一次以上的通知。<a href="https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html" target="_blank" rel="external">原文链接</a></p>
+<h3 id="利用VoIP"><a href="#利用VoIP" class="headerlink" title="利用VoIP"></a>利用VoIP</h3><p>VoIP推送被认为是高优先级通知，并且毫无延迟地传送。VoIP推送可以包括比标准推送通知提供的数据更多的数据。如果收到VoIP推送时，您的应用程序未运行，则会自动重新启动。<br>即使您的应用在后台运行，您的应用也会在运行时处理推送。<br>VoIP是能真正做到在App挂起和被杀死情况下实时拉起应用的方法。当然它也有一定的局限性，应用必须要是VoIP应用，即应用中有类似视频呼叫或者语音呼叫等功能。</p>
+<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2016/05/10/BackgroundTask/">https://ctinusdev.github.io/2016/05/10/BackgroundTask/</a><br><strong>转载请注明出处！</strong> </p>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="ctinusDev WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="ctinusDev Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/01/PrintRedirect/" rel="next" title="iOS输出重定向">
+                <i class="fa fa-chevron-left"></i> iOS输出重定向
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/03/WriteWildPointer/" rel="prev" title="ARC下野指针常见写法">
+                ARC下野指针常见写法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ctinusDev" />
+          <p class="site-author-name" itemprop="name">ctinusDev</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、完全不申请后台运行"><span class="nav-number">1.</span> <span class="nav-text">1、完全不申请后台运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、申请3分钟的后台运行时间"><span class="nav-number">2.</span> <span class="nav-text">2、申请3分钟的后台运行时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、伪无限后台"><span class="nav-number">3.</span> <span class="nav-text">3、伪无限后台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、后台唤醒"><span class="nav-number">4.</span> <span class="nav-text">4、后台唤醒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#利用CLLocationManager"><span class="nav-number">4.1.</span> <span class="nav-text">利用CLLocationManager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS静默推送"><span class="nav-number">4.2.</span> <span class="nav-text">iOS静默推送</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#先看看静默推送与普通推送的区别："><span class="nav-number">4.2.0.1.</span> <span class="nav-text">先看看静默推送与普通推送的区别：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#静默推送的使用："><span class="nav-number">4.2.0.2.</span> <span class="nav-text">静默推送的使用：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用VoIP"><span class="nav-number">4.3.</span> <span class="nav-text">利用VoIP</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ctinusDev</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("z64DkEGmmRACgBQhankrR9CS-gzGzoHsz", "lEVwYGjtw9hocOO8l3Ycldiq");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

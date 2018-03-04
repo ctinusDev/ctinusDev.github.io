@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,Wild Pointer," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
+<meta name="keywords" content="iOS,Wild Pointer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARC下野指针常见写法">
+<meta property="og:url" content="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/index.html">
+<meta property="og:site_name" content="ctinusDev&#39;s Blog">
+<meta property="og:description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-03T13:28:48.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ARC下野指针常见写法">
+<meta name="twitter:description" content="野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。 1、对象释放后，指针没有置空。常见写法1：1@property (nonatomic, unsafe_unretained) id obj; 问题原因：unsafe_unretained申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/"/>
+
+
+
+
+
+  <title>ARC下野指针常见写法 | ctinusDev's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ctinusDev's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Development  Sharing</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ctinusDev">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ctinusDev's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ARC下野指针常见写法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-03T21:01:35+08:00">
+                2017-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/03/03/WriteWildPointer/" class="leancloud_visitors" data-flag-title="ARC下野指针常见写法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>野指针的bug应该算是最难查的bug之一了，因为其随机性强，且难以定位，下面就终结了几类常见的高概率野指针写法。</p>
+<h2 id="1、对象释放后，指针没有置空。"><a href="#1、对象释放后，指针没有置空。" class="headerlink" title="1、对象释放后，指针没有置空。"></a>1、对象释放后，指针没有置空。</h2><h3 id="常见写法1："><a href="#常见写法1：" class="headerlink" title="常见写法1："></a>常见写法1：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, unsafe_unretained) id obj;</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br><code>unsafe_unretained</code>申明的obj并不会在对象释放时将指针置空，如果对象释放之后，继续使用obj就有可能出现野指针的问题。<br><strong>解决方案：</strong><br>尽量使用<code>weak|strong|copy</code>等来代替<code>unsafe_unretained</code>来修饰属性。如果一定要使用<code>unsafe_unretained</code>，记得对象释放后，将指针置空。</p>
+<h3 id="常见写法2"><a href="#常见写法2" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><p>在<code>objc_setAssociatedObject</code>方法中该用<code>OBJC_ASSOCIATION_RETAIN_NONATOMIC</code>修饰的对象误用成<code>OBJC_ASSOCIATION_ASSIGN</code><br><strong>问题原因：</strong><br>这个问题和上面的<strong>常见写法1</strong>问题是类似的，就不重复了。</p>
+<h3 id="常见写法3："><a href="#常见写法3：" class="headerlink" title="常见写法3："></a>常见写法3：</h3><p>NSNotification/KVO 只addObserver并没有removeObserver</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@interface viewController: UIViewController</div><div class="line">@property (nonatomic, strong) id obj;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation viewController</div><div class="line"></div><div class="line">-(void)someButtonClick:(id)sender</div><div class="line">&#123;</div><div class="line">    [self.obj addObserver:self forKeyPath:@&quot;someKey&quot; options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];</div><div class="line">&#125;</div><div class="line">-(void)dealloc</div><div class="line">&#123;</div><div class="line">    //没有移除观察者</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br>self.obj添加了self作为观察者后，是通过<code>unsafe_unretained</code>指针引用的self，如果对象释放之前不移除观察，self.obj对应keyPath发生变化时，仍然会去尝试给self指向的对象发送通知。就可能会出现野指针了。<br><strong>解决方案：</strong><br>1、原始方法，记得addObserver和removeObserver成对出现。<br>2、利用KVOController</p>
+<h2 id="2、对象提前释放了"><a href="#2、对象提前释放了" class="headerlink" title="2、对象提前释放了"></a>2、对象提前释放了</h2><h3 id="常见写法1：-1"><a href="#常见写法1：-1" class="headerlink" title="常见写法1："></a>常见写法1：</h3><p>异步方法block回调中，没有强引用self。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">__weak typeof(self) weakself = self;</div><div class="line">[obj method:^(id result) &#123;</div><div class="line">    [weakself someMethod];</div><div class="line">&#125;];</div><div class="line">-(void)someMethod</div><div class="line">&#123;</div><div class="line">    self.test = ....;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br>ARC下，由于性能原因self既不是strong也不是weak，而是<code>unsafe_unretained</code>的。上面代码block并没有引用强引用self。若是在执行[weakSelf someMethod]时，刚好self被释放了，那么self.test 这句的执行就有可能造成野指针崩溃。<br><strong>解决方案：</strong><br>在进入block时，先强引用weakself。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">__weak typeof(self) weakself = self;</div><div class="line">    [obj method:^(id result) &#123;</div><div class="line">        __strong typeof(self) strongself = weakSelf;</div><div class="line">        [strongself someMethod];</div><div class="line">    &#125;];</div></pre></td></tr></table></figure>
+<h3 id="常见写法2-1"><a href="#常见写法2-1" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@interface viewController: UIViewController</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation viewController</div><div class="line"></div><div class="line">-(void)someButtonClick:(id)sender</div><div class="line">&#123;</div><div class="line">    [self.navigationController popViewControllerAnimated:NO];</div><div class="line">    </div><div class="line">    [self someMethod];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br>由于self在pop之后就会被释放，在pop之后，继续使用self，就可能会导致野指针。<br><strong>解决方案：</strong><br>在pop和dismiss之后不要在使用self，关于self的操作都在pop和dismiss之前。</p>
+<h2 id="3、对象的多次释放。"><a href="#3、对象的多次释放。" class="headerlink" title="3、对象的多次释放。"></a>3、对象的多次释放。</h2><h3 id="常见写法1"><a href="#常见写法1" class="headerlink" title="常见写法1:"></a>常见写法1:</h3><p>多个线程同时对某个对象赋值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@interface SomeClass: NSObject</div><div class="line">@property (nonatomic, strong) NSArray *array;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation SomeClass</div><div class="line"></div><div class="line">- (void)viewDidLoad</div><div class="line">&#123;</div><div class="line">    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">        self.array = @[@&quot;test&quot;];</div><div class="line">    &#125;);</div><div class="line">    self.array = @[@&quot;test&quot;];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br>在调用setArray:时，新的值会被retain，旧的值会被release。如果两个线程同时执行了setArray:,那么旧的值就可能会release放两次。</p>
+<p><strong>解决方案：</strong><br>找个问题不难解决，对象赋之前先加锁，再赋值就可以解决这类问题。</p>
+<h3 id="常见写法2-2"><a href="#常见写法2-2" class="headerlink" title="常见写法2:"></a>常见写法2:</h3><p>CoreFoundation层对象Toll-Free Bridging到Foundation层中，已经用了__bridge_transfer关键字转移了对象的所有权之后，又对CoreFoundation层对象调用了一次CFRelease</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CFUUIDRef uuid = CFUUIDCreate(NULL);</div><div class="line">CFStringRef cfString = CFUUIDCreateString(NULL, uuid);</div><div class="line">NSString *string = (__bridge_transfer NSString *)cfString;</div><div class="line">CFRelease(cfString);</div></pre></td></tr></table></figure>
+<p><strong>问题原因：</strong><br>使用<code>__bridge_transfer</code>之后，cfString的所有权已经交由ARC处理，这时再次接手动调用release，会导致重复释放的问题。</p>
+<p><strong>解决方案：</strong><br>1、将<code>__bridge_transfer</code>改为<code>__bridge</code>，不转移对象的所有权。<br>2、去掉<code>CFRelease(cfString)</code>；</p>
+<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2017/03/03/WriteWildPointer/">https://ctinusdev.github.io/2017/03/03/WriteWildPointer/</a><br><strong>转载请注明出处！</strong> </p>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="ctinusDev WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="ctinusDev Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/Wild-Pointer/" rel="tag"># Wild Pointer</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/10/BackgroundTask/" rel="next" title="iOS后台运行的相关方案总结">
+                <i class="fa fa-chevron-left"></i> iOS后台运行的相关方案总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/FileCache/" rel="prev" title="iOS文件缓存">
+                iOS文件缓存 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ctinusDev" />
+          <p class="site-author-name" itemprop="name">ctinusDev</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、对象释放后，指针没有置空。"><span class="nav-number">1.</span> <span class="nav-text">1、对象释放后，指针没有置空。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1："><span class="nav-number">1.1.</span> <span class="nav-text">常见写法1：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2"><span class="nav-number">1.2.</span> <span class="nav-text">常见写法2:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法3："><span class="nav-number">1.3.</span> <span class="nav-text">常见写法3：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、对象提前释放了"><span class="nav-number">2.</span> <span class="nav-text">2、对象提前释放了</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1：-1"><span class="nav-number">2.1.</span> <span class="nav-text">常见写法1：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2-1"><span class="nav-number">2.2.</span> <span class="nav-text">常见写法2:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、对象的多次释放。"><span class="nav-number">3.</span> <span class="nav-text">3、对象的多次释放。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法1"><span class="nav-number">3.1.</span> <span class="nav-text">常见写法1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见写法2-2"><span class="nav-number">3.2.</span> <span class="nav-text">常见写法2:</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ctinusDev</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("z64DkEGmmRACgBQhankrR9CS-gzGzoHsz", "lEVwYGjtw9hocOO8l3Ycldiq");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

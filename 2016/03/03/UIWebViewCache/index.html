@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,UIWebView,Cache," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="UIWebview缓存策略说到UIWebview的缓存问题，就不得不提 NSURLRequest 的缓存策略 cachePolicy，cachePolicy枚举如下： 12345678910111213typedef NS_ENUM(NSUInteger, NSURLRequestCachePolicy)&amp;#123;    NSURLRequestUseProtocolCachePolicy =">
+<meta name="keywords" content="iOS,UIWebView,Cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于UIWebview缓存策略">
+<meta property="og:url" content="https://ctinusdev.github.io/2016/03/03/UIWebViewCache/index.html">
+<meta property="og:site_name" content="ctinusDev&#39;s Blog">
+<meta property="og:description" content="UIWebview缓存策略说到UIWebview的缓存问题，就不得不提 NSURLRequest 的缓存策略 cachePolicy，cachePolicy枚举如下： 12345678910111213typedef NS_ENUM(NSUInteger, NSURLRequestCachePolicy)&amp;#123;    NSURLRequestUseProtocolCachePolicy =">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-03T14:07:26.852Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于UIWebview缓存策略">
+<meta name="twitter:description" content="UIWebview缓存策略说到UIWebview的缓存问题，就不得不提 NSURLRequest 的缓存策略 cachePolicy，cachePolicy枚举如下： 12345678910111213typedef NS_ENUM(NSUInteger, NSURLRequestCachePolicy)&amp;#123;    NSURLRequestUseProtocolCachePolicy =">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ctinusdev.github.io/2016/03/03/UIWebViewCache/"/>
+
+
+
+
+
+  <title>关于UIWebview缓存策略 | ctinusDev's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ctinusDev's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Development  Sharing</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ctinusdev.github.io/2016/03/03/UIWebViewCache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ctinusDev">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ctinusDev's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于UIWebview缓存策略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-03T21:42:21+08:00">
+                2016-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/03/03/UIWebViewCache/" class="leancloud_visitors" data-flag-title="关于UIWebview缓存策略">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="UIWebview缓存策略"><a href="#UIWebview缓存策略" class="headerlink" title="UIWebview缓存策略"></a>UIWebview缓存策略</h2><p>说到<code>UIWebview</code>的缓存问题，就不得不提 <code>NSURLRequest</code> 的缓存策略 <code>cachePolicy</code>，<code>cachePolicy</code>枚举如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSUInteger</span>, <span class="built_in">NSURLRequestCachePolicy</span>)</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSURLRequestUseProtocolCachePolicy</span> = <span class="number">0</span>,</div><div class="line"></div><div class="line">    <span class="built_in">NSURLRequestReloadIgnoringLocalCacheData</span> = <span class="number">1</span>,</div><div class="line">    <span class="built_in">NSURLRequestReloadIgnoringLocalAndRemoteCacheData</span> = <span class="number">4</span>, <span class="comment">// Unimplemented</span></div><div class="line">    <span class="built_in">NSURLRequestReloadIgnoringCacheData</span> = <span class="built_in">NSURLRequestReloadIgnoringLocalCacheData</span>,</div><div class="line"></div><div class="line">    <span class="built_in">NSURLRequestReturnCacheDataElseLoad</span> = <span class="number">2</span>,</div><div class="line">    <span class="built_in">NSURLRequestReturnCacheDataDontLoad</span> = <span class="number">3</span>,</div><div class="line"></div><div class="line">    <span class="built_in">NSURLRequestReloadRevalidatingCacheData</span> = <span class="number">5</span>, <span class="comment">// Unimplemented</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>枚举中我们真正能使用的枚举只有<code>NSURLRequestUseProtocolCachePolicy</code> 、<code>NSURLRequestReloadIgnoringLocalCacheData</code> 、<code>NSURLRequestReturnCacheDataElseLoad</code> 、<code>NSURLRequestReturnCacheDataDontLoad</code> 这四种类型。</p>
+<h2 id="各个缓存策略理解"><a href="#各个缓存策略理解" class="headerlink" title="各个缓存策略理解"></a>各个缓存策略理解</h2><h3 id="NSURLRequestReloadIgnoringLocalCacheData"><a href="#NSURLRequestReloadIgnoringLocalCacheData" class="headerlink" title="NSURLRequestReloadIgnoringLocalCacheData"></a>NSURLRequestReloadIgnoringLocalCacheData</h3><p>不理会本地的缓存是否有效或者需要更新，直接从源代码处拉取最新数据。</p>
+<h3 id="NSURLRequestReturnCacheDataElseLoad"><a href="#NSURLRequestReturnCacheDataElseLoad" class="headerlink" title="NSURLRequestReturnCacheDataElseLoad"></a>NSURLRequestReturnCacheDataElseLoad</h3><p>如果本地已有缓存（不理会本地的缓存是否有效或者需要更新），则直接返回；否则从源代码处拉取最新的数据。</p>
+<h3 id="NSURLRequestReturnCacheDataElseLoad-1"><a href="#NSURLRequestReturnCacheDataElseLoad-1" class="headerlink" title="NSURLRequestReturnCacheDataElseLoad"></a>NSURLRequestReturnCacheDataElseLoad</h3><p>如果本地已有缓存（不理会本地的缓存是否有效或者需要更新），则直接返回；否则被认为请求失败，直接返回错误。<br>这种缓存策略，类似于“脱机”模式。</p>
+<h3 id="NSURLRequestUseProtocolCachePolicy"><a href="#NSURLRequestUseProtocolCachePolicy" class="headerlink" title="NSURLRequestUseProtocolCachePolicy"></a>NSURLRequestUseProtocolCachePolicy</h3><p>默认的缓存策略，这种缓存策略会根据request和response中的headfields中的相关头部信息中获取对应的缓存方案。<br>很多人对这个默认缓存策略摸不着头脑，不知道它到底是怎么运作的。只是感觉它一会读缓存，一会不读缓存，一会缓存很久（杀了App都还有，甚至连404这样的错误都会被缓存起来）。之所以会出现这些现象是因为这个缓存策略会根据http headfields中的相关字段来控制缓存，比如缓存新鲜度时长、缓存是否需要刷新等。headfields中控制于缓存相关的字段有 Expires,Cache-Control,Last-Modified,ETag。下面就介绍下这些字段。</p>
+<h4 id="1、Expires"><a href="#1、Expires" class="headerlink" title="1、Expires"></a>1、Expires</h4><p>（过期时间）HTTP头信息Expires（过期时间） 属性是HTTP控制缓存的基本手段，这个属性告诉缓存器：相关副本在多长时间内是新鲜的。过了这个时间，缓存器就会向源服务器发送请求，检查文档是否被修改。几乎所有的缓存服务器都支持Expires（过期时间）属性；<br>格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;Expires&quot; &quot;:&quot; HTTP-date</div></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Expires: Thu, 01 Dec 1994 16:00:00 GMT （必须是GMT格式）</div></pre></td></tr></table></figure>
+<h4 id="2、Cache-Control"><a href="#2、Cache-Control" class="headerlink" title="2、Cache-Control"></a>2、Cache-Control</h4><p>Cache-control用于控制HTTP缓存（在HTTP/1.0中可能部分没实现，仅仅实现了Pragma: no-cache）<br>数据包中的格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Cache-Control: &apos;cache-directive&apos;</div></pre></td></tr></table></figure>
+<p>‘cache-directive’可以为以下参数：</p>
+<ul>
+<li>request时可以使用以下参数：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">| &quot;no-cache&quot;</div><div class="line">| &quot;no-store&quot;</div><div class="line">| &quot;max-age&quot; &quot;=&quot; delta-seconds</div><div class="line">| &quot;max-stale&quot; [ &quot;=&quot; delta-seconds ]</div><div class="line">| &quot;min-fresh&quot; &quot;=&quot; delta-seconds</div><div class="line">| &quot;no-transform&quot;</div><div class="line">| &quot;only-if-cached&quot;</div><div class="line">| &quot;cache-extension&quot;</div></pre></td></tr></table></figure>
+<ul>
+<li>response时可以使用以下参数：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">| &quot;public&quot;</div><div class="line">| &quot;private&quot; [ &quot;=&quot; &lt;&quot;&gt; field-name &lt;&quot;&gt; ]</div><div class="line">| &quot;no-cache&quot; [ &quot;=&quot; &lt;&quot;&gt; field-name &lt;&quot;&gt; ]</div><div class="line">| &quot;no-store&quot;</div><div class="line">| &quot;no-transform&quot;</div><div class="line">| &quot;must-revalidate&quot;</div><div class="line">| &quot;proxy-revalidate&quot;</div><div class="line">| &quot;max-age&quot; &quot;=&quot; delta-seconds</div><div class="line">| &quot;s-maxage&quot; &quot;=&quot; delta-seconds</div><div class="line">| &quot;cache-extension&quot;</div></pre></td></tr></table></figure>
+<p><em>部分说明：</em></p>
+<ul>
+<li><p>根据是否可缓存分为<br><strong>Public</strong>  指示响应可被任何缓存区缓存。<br><strong>Private</strong>  指示对于单个用户的整个或部分响应消息，不能被共享缓存处理。这允许服务器仅仅描述当用户的部分响应消息，此响应消息对于其他用户的请求无效。<br><strong>no-cache</strong>  指示请求或响应消息不能缓存（HTTP/1.0用Pragma的no-cache替换）</p>
+</li>
+<li><p>根据什么能被缓存<br><strong>no-store</strong>  用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。</p>
+</li>
+<li><p>根据缓存超时<br><strong>max-age</strong>  指示客户机可以接收生存期不大于指定时间（以秒为单位）的响应。<br><strong>min-fresh</strong>  指示客户机可以接收响应时间小于当前时间加上指定时间的响应。<br><strong>max-stale</strong>  指示客户机可以接收超出超时期间的响应消息。如果指定max-stale消息的值，那么客户机可以接收超出超时期指定值之内的响应消息。</p>
+</li>
+</ul>
+<h4 id="3、Last-Modified-If-Modified-Since"><a href="#3、Last-Modified-If-Modified-Since" class="headerlink" title="3、Last-Modified/If-Modified-Since"></a>3、<strong>Last-Modified/If-Modified-Since</strong></h4><p><code>Last-Modified/If-Modified-Since</code>用于本地缓存更新检测。<br>客户端发送请求时，request 的headFields中加入<code>If-Modified-Since</code>，表示上一次获取的修改日期。<br>服务端接收到请求后，根据<code>If-Modified-Since</code>判断数据是否有变化。如果没有变化，则直接返回304；如果发生了变化，则返回最新数据，并在response的headfields中加入<code>Last-Modified</code>，表示最新的修改时间。</p>
+<h4 id="4、ETag-If-None-Match"><a href="#4、ETag-If-None-Match" class="headerlink" title="4、ETag/If-None-Match"></a>4、<strong>ETag/If-None-Match</strong></h4><p><code>ETag</code> 是实现与最近修改数据检查同样的功能的另一种方法：没有变化时不重新下载数据。其工作方式是：服务器发送你所请求的数据的同时，发送某种数据的 hash (在 <code>ETag</code> 头信息中给出)。hash 的确定完全取决于服务器。当第二次请求相同的数据时，你需要在 <code>If-None-Match:</code>头信息中包含 <code>ETag hash</code>，如果数据没有改变，服务器将返回 304 状态代码。</p>
+<p>这几个http头可以作为meta标签发送到客户端，但是需要注意的是Http头中的设置优先级更高一些，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;meta. http-equiv=”Expires” CONTENT=” Fri, 30 Oct 1998 14:19:41″&gt;</div><div class="line">&lt;meta. http-equiv=”Cache-Control” CONTENT=”no-cache”&gt;</div></pre></td></tr></table></figure>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h2><p><code>Expires/Cache-Control</code> Header是控制浏览器是否直接从浏览器缓存取数据还是重新发请求到服务器取数据。只是<code>Cache-Control</code>比<code>Expires</code>可以控制的多一些， 而且<code>Cache-Control</code>会重写<code>Expires</code>的规则。</p>
+<p><code>Last-Modified/If-Modified-Since</code>和<code>ETag/If-None-Match</code>是浏览器发送请求到服务器后判断文件是否已经修改过，如果没有修改过就只发送一个304回给浏览器，告诉浏览器直接从自己本地的缓存取数据；如果修改过那就整个数据重新发给浏览器。</p>
+<p>了解了这些字段后，我们就可以抓取下http包来分析下为什么页面不刷新,什么时候页面会刷新了.</p>
+<div class="note danger"><p><strong> 本文作者：</strong> ctinusdev<br><strong>本文链接：</strong> <a href="https://ctinusdev.github.io/2016/03/03/UIWebViewCache/">https://ctinusdev.github.io/2016/03/03/UIWebViewCache/</a><br><strong>转载请注明出处！</strong> </p>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechatpay.jpg" alt="ctinusDev WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.jpg" alt="ctinusDev Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/UIWebView/" rel="tag"># UIWebView</a>
+          
+            <a href="/tags/Cache/" rel="tag"># Cache</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/01/PrintRedirect/" rel="prev" title="iOS输出重定向">
+                iOS输出重定向 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ctinusDev" />
+          <p class="site-author-name" itemprop="name">ctinusDev</p>
+           
+              <p class="site-description motion-element" itemprop="description">iOS Developer</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIWebview缓存策略"><span class="nav-number">1.</span> <span class="nav-text">UIWebview缓存策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各个缓存策略理解"><span class="nav-number">2.</span> <span class="nav-text">各个缓存策略理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NSURLRequestReloadIgnoringLocalCacheData"><span class="nav-number">2.1.</span> <span class="nav-text">NSURLRequestReloadIgnoringLocalCacheData</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSURLRequestReturnCacheDataElseLoad"><span class="nav-number">2.2.</span> <span class="nav-text">NSURLRequestReturnCacheDataElseLoad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSURLRequestReturnCacheDataElseLoad-1"><span class="nav-number">2.3.</span> <span class="nav-text">NSURLRequestReturnCacheDataElseLoad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSURLRequestUseProtocolCachePolicy"><span class="nav-number">2.4.</span> <span class="nav-text">NSURLRequestUseProtocolCachePolicy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、Expires"><span class="nav-number">2.4.1.</span> <span class="nav-text">1、Expires</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Cache-Control"><span class="nav-number">2.4.2.</span> <span class="nav-text">2、Cache-Control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、Last-Modified-If-Modified-Since"><span class="nav-number">2.4.3.</span> <span class="nav-text">3、Last-Modified/If-Modified-Since</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、ETag-If-None-Match"><span class="nav-number">2.4.4.</span> <span class="nav-text">4、ETag/If-None-Match</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">3.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ctinusDev</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("z64DkEGmmRACgBQhankrR9CS-gzGzoHsz", "lEVwYGjtw9hocOO8l3Ycldiq");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
