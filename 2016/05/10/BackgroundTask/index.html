@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta name="description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App退到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS后台运行的相关方案总结">
 <meta property="og:url" content="https://ctinusdev.github.io/2016/05/10/BackgroundTask/index.html">
 <meta property="og:site_name" content="ctinusDev&#39;s Blog">
-<meta property="og:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta property="og:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App退到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ctinusdev.github.io/images/BackgroundTask/image1.png">
 <meta property="og:image" content="https://ctinusdev.github.io/images/BackgroundTask/image2.png">
-<meta property="og:updated_time" content="2018-03-03T15:03:49.298Z">
+<meta property="og:updated_time" content="2018-03-04T06:27:04.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS后台运行的相关方案总结">
-<meta name="twitter:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
+<meta name="twitter:description" content="1、完全不申请后台运行一般来说，在完全没有申请后台运行的情况下，App退到后台后，只有5s的时间来执行代码，之后程序将被挂起。 2、申请3分钟的后台运行时间在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。 123- (UIBackgroundTaskIdentifier)beginBackgroundTaskWithE">
 <meta name="twitter:image" content="https://ctinusdev.github.io/images/BackgroundTask/image1.png">
 
 
@@ -334,7 +334,7 @@
       
 
       
-        <h2 id="1、完全不申请后台运行"><a href="#1、完全不申请后台运行" class="headerlink" title="1、完全不申请后台运行"></a>1、完全不申请后台运行</h2><p>一般来说，在完全没有申请后台运行的情况下，App推到后台后，只有5s的时间来执行代码，之后程序将被挂起。</p>
+        <h2 id="1、完全不申请后台运行"><a href="#1、完全不申请后台运行" class="headerlink" title="1、完全不申请后台运行"></a>1、完全不申请后台运行</h2><p>一般来说，在完全没有申请后台运行的情况下，App退到后台后，只有5s的时间来执行代码，之后程序将被挂起。</p>
 <h2 id="2、申请3分钟的后台运行时间"><a href="#2、申请3分钟的后台运行时间" class="headerlink" title="2、申请3分钟的后台运行时间"></a>2、申请3分钟的后台运行时间</h2><p>在没有申请像音频播放、后台定位、newsstand、VoIP等后台运行权限时。苹果也给我们提供了一种可以延长后台运行时间的方法。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">UIBackgroundTaskIdentifier</span>)beginBackgroundTaskWithExpirationHandler:(<span class="keyword">void</span>(^ __<span class="keyword">nullable</span>)(<span class="keyword">void</span>))handler  <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">4</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div><div class="line">- (<span class="built_in">UIBackgroundTaskIdentifier</span>)beginBackgroundTaskWithName:(<span class="keyword">nullable</span> <span class="built_in">NSString</span> *)taskName expirationHandler:(<span class="keyword">void</span>(^ __<span class="keyword">nullable</span>)(<span class="keyword">void</span>))handler <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div><div class="line">- (<span class="keyword">void</span>)endBackgroundTask:(<span class="built_in">UIBackgroundTaskIdentifier</span>)identifier <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">4</span>_0) <span class="built_in">NS_REQUIRES_SUPER</span>;</div></pre></td></tr></table></figure>
 <p>在使用方法大致如下：</p>

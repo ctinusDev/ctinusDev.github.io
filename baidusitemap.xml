@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://ctinusdev.github.io/2016/05/10/BackgroundTask/</loc>
-    <lastmod>2018-03-03T15:03:49.298Z</lastmod>
+    <lastmod>2018-03-04T06:27:04.036Z</lastmod>
     <data>
         <display>
         <title>iOS后台运行的相关方案总结</title>
@@ -164,6 +164,32 @@
 
     
   <url>
+    <loc>https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/</loc>
+    <lastmod>2017-08-20T10:05:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>为什么不能runtime创建JSExport类型的Protocol？</title>
+        <pubTime>2017-08-05T10:08:18.000Z</pubTime>
+        
+        <tag>iOS</tag>
+         
+        <tag>runtime</tag>
+         
+        <tag>JSExport</tag>
+         
+        <tag>JavaScriptCore</tag>
+         
+         
+           
+             
+              <breadCrumb title="iOS" url="https://ctinusdev.github.io/categories/iOS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://ctinusdev.github.io/2017/08/13/BSDSocketServer/</loc>
     <lastmod>2017-08-20T10:05:57.000Z</lastmod>
     <data>
@@ -192,32 +218,6 @@
 
     
   <url>
-    <loc>https://ctinusdev.github.io/2017/08/05/CantnotCreateJSExportAtRuntime/</loc>
-    <lastmod>2017-08-20T10:05:57.000Z</lastmod>
-    <data>
-        <display>
-        <title>为什么不能runtime创建JSExport类型的Protocol？</title>
-        <pubTime>2017-08-05T10:08:18.000Z</pubTime>
-        
-        <tag>iOS</tag>
-         
-        <tag>runtime</tag>
-         
-        <tag>JSExport</tag>
-         
-        <tag>JavaScriptCore</tag>
-         
-         
-           
-             
-              <breadCrumb title="iOS" url="https://ctinusdev.github.io/categories/iOS/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://ctinusdev.github.io/2017/07/30/EffectiveObjcLearn/</loc>
     <lastmod>2017-08-20T10:02:26.000Z</lastmod>
     <data>
@@ -225,9 +225,9 @@
         <title>Effective Objective-C 总结</title>
         <pubTime>2017-07-30T04:00:07.000Z</pubTime>
         
-        <tag>Objective-C</tag>
-         
         <tag>iOS</tag>
+         
+        <tag>Objective-C</tag>
          
          
            
